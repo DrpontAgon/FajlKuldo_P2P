@@ -1,7 +1,7 @@
 ﻿# SP2P
 Fájl küldő program házilag.
 
-Nincs fájl mennyiség korlátozás. Annyit küldesz, amennyit szeretnél.
+Nincs fájl mennyiség- és méretkorlátozás. Annyit küldesz, amennyit szeretnél.
 
 Minimum követelmény:
 * Windows Vista vagy újabb
