@@ -3,10 +3,28 @@ using System.IO;
 
 namespace SP2P
 {
+    /// <summary>
+    /// Az IPLogger célja hogy elmentse az IP címet akkor ha az megváltozott.
+    /// Az elmentett IP a fájl elejére kerül így a fájlban mindig a legfrissebbtől
+    /// a legrégebbiig van tárolva az IP. Helysprórolásért az elmentett IP binárisan
+    /// van elmentve, azaz kódolástól függően a külső szemlélőnek 1 karakter az megegyezik
+    /// 1 vagy 2 db IP cím negyeddel.
+    /// 
+    /// Általános használata:
+    /// 
+    /// IPAddress x = bármilyen IP cím;
+    /// x.CheckAndLogIP();
+    /// 
+    /// </summary>
     static class IPLogger
     {
         private static string fpath = "IPLog.ipd";
 
+        /// <summary>
+        /// Függvény neve magáért beszél, elkészíti a fájlt és
+        /// az első bejegyzés a megadott ip cím lesz.
+        /// </summary>
+        /// <param name="ip"> Megadott ip cím </param>
         public static void ResetLogToThisIP(this IPAddress ip)
         {
             using (FileStream f = new FileStream(fpath, FileMode.Create))
@@ -15,6 +33,12 @@ namespace SP2P
             }
         }
 
+        /// <summary>
+        /// Függvény neve magáért beszél, ha létezik a fájl akkor végrahajtja az
+        /// ellenőrzést, és ezen ellenőrzéstől függ hogy elmenti-e a megadott ip-t.
+        /// Amennyiben a fájl nem létezik, akkor elkészül a ResetLogToThisIP függvényen keresztül.
+        /// </summary>
+        /// <param name="ip"> Megadott ip cím </param>
         public static void CheckAndLogIP(this IPAddress ip)
         {
             if (File.Exists(fpath))
@@ -24,6 +48,12 @@ namespace SP2P
             else ResetLogToThisIP(ip);
         }
 
+        /// <summary>
+        /// Beolvassa az első 4 karaktert ami a legutoljára elmentett ip cím és
+        /// összehasonlítja a megadott ip címmel és ez alapján vissza ad egy értéket.
+        /// </summary>
+        /// <param name="ip"> Megadott ip cím </param>
+        /// <returns> Logikai érték, igaz ha nem egyezik az ip, azaz el kell menteni </returns>
         private static bool CheckIp(IPAddress ip)
         {
             FileStream f = new FileStream(fpath, FileMode.Open);
@@ -34,6 +64,12 @@ namespace SP2P
             return !(ip.Equals(last_ip));
         }
 
+        /// <summary>
+        /// Függvény neve magáért beszél, beolvassa a teljes fájl tartalmát,
+        /// újra elkészíti a fájlt (így üres) és a megadott ip-t a fájl elejére írja,
+        /// az elmentett előző adatot pedig utána írja.
+        /// </summary>
+        /// <param name="ip"> Megadott ip cím </param>
         private static void LogIp(IPAddress ip)
         {
             byte[] arr = File.ReadAllBytes(fpath);
