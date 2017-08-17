@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace SP2P
+namespace SP2P_old
 {
     class IPChangeChecker
     {
@@ -12,7 +12,6 @@ namespace SP2P
 
         protected static void RaiseNetChanged(IPChangeCheckerEventArgs e)
         {
-
             NetChanged?.Invoke(typeof(IPChangeChecker), e);
         }
 
@@ -70,7 +69,6 @@ namespace SP2P
                     }
                 }
             }
-
             return output;
         }
 

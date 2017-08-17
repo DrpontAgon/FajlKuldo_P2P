@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="IPChangeChecker.cs" />
     <Compile Include="IPLogger.cs" />
+    <Compile Include="legacy\IPChangeChecker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
