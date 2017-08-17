@@ -6,16 +6,39 @@ using System.Net.Sockets;
 
 namespace SP2P
 {
+    /// <summary>
+    /// IPChangeChecker célja hogy érzékelje az IP cím változásait és ez eventként kezelődik,
+    /// azaz köthető hozzá kód ami csak akkor fut le ha éppen változott az IP (és nem kell
+    /// feleslegesen megadott időintervallumban ellenőrizni azt). Ez az osztály visszaadja a
+    /// Privát (LAN) és publikus (WAN) IP címet is.
+    /// 
+    /// Általános használata:
+    /// 
+    /// IPChangeChecker.IPChanged += EventMetodus ahol
+    /// private void Eventmetodus(object sender, IPChangedEventArgs e) { ... }
+    /// 
+    /// vagy 
+    /// 
+    /// IPChangeChecker.IPChanged += (object sender, IPChangedEventArgs e) => { ... }
+    /// 
+    /// és végül kell:
+    /// 
+    /// IPChangeChecker.ForceCheck();
+    /// 
+    /// </summary>
     class IPChangeChecker
     {
-        public static event IPChangeCheckerEventHandler NetChanged;
+        public static event IPChangedEventHandler IPChanged;
 
-        protected static void RaiseNetChanged(IPChangeCheckerEventArgs e)
+        protected static void RaiseNetChanged(IPChangedEventArgs e)
         {
-
-            NetChanged?.Invoke(typeof(IPChangeChecker), e);
+            IPChanged?.Invoke(typeof(IPChangeChecker), e);
         }
 
+        /// <summary>
+        /// Statikus konstruktor, Beállítja a NetworkChange két eventjére
+        /// ugyan azt a metódust.
+        /// </summary>
         static IPChangeChecker()
         {
             NetworkChange.NetworkAddressChanged += AddressChanged;
@@ -24,111 +47,134 @@ namespace SP2P
 
         public static IPAddress PublicIP { get; private set; }
 
-        //public static IPAddress[] PrivateIPs { get; private set; }
-
         public static IPAddress PrivateIP { get; private set; }
 
-        public static bool LoopbackIpPresent
+        /// <summary>
+        /// Loopback = 127.0.0.1 (= localhost)
+        /// </summary>
+        public static bool PrivateIpIsLoopback
         {
-            get
-            {
-                return IPAddress.IsLoopback(PrivateIP);
-            }
+            get { return IPAddress.IsLoopback(PrivateIP); }
         }
 
+        /// <summary>
+        /// None = 255.255.255.255
+        /// </summary>
+        public static bool PublicIpIsNone
+        {
+            get { return PublicIP.Equals(IPAddress.None); }
+        }
+
+        /// <summary>
+        /// Kényszerített ellenőrzés, meghívja a NetworkChange eventjeihez
+        /// kapcsolt metódust paraméterek nélkül.
+        /// </summary>
         public static void ForceCheck()
         {
             AddressChanged(null, null);
         }
 
-        private static string GetLocalIPv4(NetworkInterfaceType _type)
+        /// <summary>
+        /// Issue #0001
+        /// Viktor ha le tudod részletesebben írni akkor egészítsd ki kérlek.
+        /// (Az eredetidhez képest annyi különbség hogy a függvényen belül
+        /// az összes típuson végigmegy így nincs paraméter, és IP címet ad vissza.
+        /// Ha kell viszonyítási alap akkor a legacy mappában az eredit kód ott van.)
+        /// 
+        /// Függvény neve magáért beszél, az összes interface-en ellenőrzéseket végez (például
+        /// Default Gateway cím meg-e van adva ugyanis csak a megfelelő IP címnek van ez)
+        /// és ez alapján visszaadja a megfelelő IP címet.
+        /// </summary>
+        /// <returns> LAN IP cím, sikertelen lekéréskor a Loopback / localhost cím </returns>
+        private static IPAddress GetLocalIPv4()
         {
-            string output = "";
-            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+            foreach (NetworkInterfaceType nit_item in Enum.GetValues(typeof(NetworkInterfaceType)))
             {
-                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
+                foreach (NetworkInterface ni_item in NetworkInterface.GetAllNetworkInterfaces())
                 {
-                    IPInterfaceProperties adapterProperties = item.GetIPProperties();
-
-                    if (adapterProperties.GatewayAddresses.FirstOrDefault() != null)
+                    if (ni_item.NetworkInterfaceType == nit_item && ni_item.OperationalStatus == OperationalStatus.Up)
                     {
-                        foreach (UnicastIPAddressInformation ip in adapterProperties.UnicastAddresses)
+                        IPInterfaceProperties adapterProperties = ni_item.GetIPProperties();
+                        if (adapterProperties.GatewayAddresses.FirstOrDefault() != null)
                         {
-                            if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                            foreach (UnicastIPAddressInformation ip in adapterProperties.UnicastAddresses)
                             {
-                                output = ip.Address.ToString();
+                                if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                                {
+                                    return ip.Address;
+                                }
                             }
                         }
                     }
                 }
             }
-
-            return output;
+            return IPAddress.Loopback;
         }
 
-        private static void AddressChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Függvény neve magáért beszél, időtúllépes képességgel módosított WebClient-el
+        /// letöltődik az oldal tartalma ami az IP cím, viszont tartalmaz egy sortörést
+        /// a végén ezért azt el kell távolítani és végül át kell alakítani IPAddress-re.
+        /// Exception-el elszállna ha nincs internet vagy a megadott 5 másodperc alatt
+        /// nem töltődik le az adat (ami gyakorlatilag azt jelenti hogy nincs internet).
+        /// </summary>
+        /// <returns> WAN IP cím, sikertelen lekéréskor a None cím </returns>
+        private static IPAddress GetPublicIPv4()
         {
-            PublicIP = IPAddress.None;
-            PrivateIP = IPAddress.Loopback;
             try
             {
                 string s = new WebDownload(5000).DownloadString("http://icanhazip.com");
-                s = s.Remove(s.Length - 1);
-                PublicIP = IPAddress.Parse(s);
+                return IPAddress.Parse(s.Remove(s.Length - 1));
             }
-            catch /*(Exception ex)*/
+            catch
             {
-                //throw ex;
+                return IPAddress.None;
             }
+        }
 
-            //PrivateIPs = Dns.GetHostAddresses(Dns.GetHostName());
-            //for (int i = 0; i < PrivateIPs.Length; i++)
-            //{
-            //    if (PrivateIPs[i].AddressFamily != AddressFamily.InterNetwork)
-            //    {
-            //        PrivateIPs[i] = IPAddress.None;
-            //    }
-            //}
-
-            //var x = Dns.GetHostAddresses(Dns.GetHostName());
-            //PrivateIPs = IPAddress.Loopback;
-            //foreach (var item in x)
-            //{
-            //    string[] sv = item.ToString().Split('.');
-            //    if (sv.Length == 4 && item.AddressFamily == AddressFamily.InterNetwork)
-            //    {
-            //        PrivateIPs = item;
-            //    }
-            //}
-
-            foreach (NetworkInterfaceType item in Enum.GetValues(typeof(NetworkInterfaceType)))
-            {
-                string s = GetLocalIPv4(item);
-                if (s != "")
-                {
-                    PrivateIP = IPAddress.Parse(s);
-                    break;
-                }
-            }
-            RaiseNetChanged(new IPChangeCheckerEventArgs(PublicIP, PrivateIP));
+        /// <summary>
+        /// NetworkChange eventjeihez kötött metódus, célja megszerezni az IP címeket
+        /// és lőni az IPChanged eventet.
+        /// </summary>
+        /// <param name="sender"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
+        /// <param name="e"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
+        private static void AddressChanged(object sender, EventArgs e)
+        {
+            PublicIP = GetPublicIPv4();
+            PrivateIP = GetLocalIPv4();
+            RaiseNetChanged(new IPChangedEventArgs(PublicIP, PrivateIP, PublicIpIsNone, PrivateIpIsLoopback));
         }
     }
 
-    delegate void IPChangeCheckerEventHandler(object sender, IPChangeCheckerEventArgs e);
+    delegate void IPChangedEventHandler(object sender, IPChangedEventArgs e);
 
-    class IPChangeCheckerEventArgs : EventArgs
+    /// <summary>
+    /// IPChanged event argumentumai (metódusban általában e változó), az
+    /// IP címek és lehetséges állapotaik így metódouson belül lokálisan elérhető.
+    /// Nem biztos hogy szükséges ez mert statikusan is elérhetőek ezek az adatok a
+    /// fő osztályból. Esetleg változás ellenőrzésre lehet használni.
+    /// </summary>
+    class IPChangedEventArgs : EventArgs
     {
-        public IPAddress PublicIP { get; }        // nem kell private set?
-        //public IPAddress[] PrivateIPs { get; }  // nem static miatt?
+        public IPAddress PublicIP { get; }
         public IPAddress PrivateIPs { get; }
+        public bool PublicIpIsNone { get; }
+        public bool PrivateIpIsLoopback { get; }
 
-        public IPChangeCheckerEventArgs(IPAddress pub_ip, IPAddress priv_ip)
+
+        public IPChangedEventArgs(IPAddress pub_ip, IPAddress priv_ip, bool pub_ip_n, bool priv_ip_l)
         {
             PublicIP = pub_ip;
             PrivateIPs = priv_ip;
+            PublicIpIsNone = pub_ip_n;
+            PrivateIpIsLoopback = priv_ip_l;
         }
     }
 
+    /// <summary>
+    /// Letöltött osztály, lényege hogy úgy módosítja a WebClien osztályt hogy
+    /// egyszerűen használható az időtúllépés funkciója.
+    /// </summary>
     public class WebDownload : WebClient
     {
         /// <summary>
