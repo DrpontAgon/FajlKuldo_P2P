@@ -1,2 +1,4 @@
 # FajlKuldo_P2P
-Fájk küldő program házilag.
+Fájl küldő program házilag.
+
+Nincs fájl mennyiség korlátozás. Annyit küldesz, amennyit szeretnél.
