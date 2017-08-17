@@ -28,240 +28,286 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.bt_csatlakoz = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.bt_connect = new System.Windows.Forms.Button();
+            this.tb_ip_1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tb_ip_2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.tb_ip_4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.tb_ip_3 = new System.Windows.Forms.TextBox();
+            this.tb_port = new System.Windows.Forms.TextBox();
+            this.lb_wan_inf = new System.Windows.Forms.Label();
+            this.lb_wan = new System.Windows.Forms.Label();
+            this.lb_lan_inf = new System.Windows.Forms.Label();
+            this.lb_lan = new System.Windows.Forms.Label();
+            this.panel = new System.Windows.Forms.Panel();
+            this.bt_more_info = new System.Windows.Forms.Button();
+            this.bt_one_info = new System.Windows.Forms.Button();
+            this.lb_files = new System.Windows.Forms.ListBox();
+            this.bt_more_send = new System.Windows.Forms.Button();
+            this.bt_one_send = new System.Windows.Forms.Button();
+            this.panel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // bt_csatlakoz
+            // bt_connect
             // 
-            this.bt_csatlakoz.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.bt_csatlakoz.Location = new System.Drawing.Point(12, 12);
-            this.bt_csatlakoz.Name = "bt_csatlakoz";
-            this.bt_csatlakoz.Size = new System.Drawing.Size(142, 36);
-            this.bt_csatlakoz.TabIndex = 0;
-            this.bt_csatlakoz.Text = "Csatlakozás";
-            this.bt_csatlakoz.UseVisualStyleBackColor = true;
+            this.bt_connect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_connect.Location = new System.Drawing.Point(42, 82);
+            this.bt_connect.Name = "bt_connect";
+            this.bt_connect.Size = new System.Drawing.Size(141, 36);
+            this.bt_connect.TabIndex = 5;
+            this.bt_connect.Text = "Csatlakozás";
+            this.bt_connect.UseVisualStyleBackColor = true;
+            this.bt_connect.Click += new System.EventHandler(this.bt_connect_Click);
             // 
-            // textBox1
+            // tb_ip_1
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.textBox1.Location = new System.Drawing.Point(160, 17);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.textBox1.MaxLength = 3;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(39, 26);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "123";
-            this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tb_ip_1.Location = new System.Drawing.Point(4, 53);
+            this.tb_ip_1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tb_ip_1.MaxLength = 3;
+            this.tb_ip_1.Name = "tb_ip_1";
+            this.tb_ip_1.Size = new System.Drawing.Size(30, 23);
+            this.tb_ip_1.TabIndex = 0;
+            this.tb_ip_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label1.Location = new System.Drawing.Point(199, 20);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.label1.Location = new System.Drawing.Point(34, 56);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(13, 20);
+            this.label1.Size = new System.Drawing.Size(13, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = ".";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label2.Location = new System.Drawing.Point(251, 20);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.label2.Location = new System.Drawing.Point(76, 56);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(13, 20);
+            this.label2.Size = new System.Drawing.Size(13, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = ".";
             // 
-            // textBox2
+            // tb_ip_2
             // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.textBox2.Location = new System.Drawing.Point(212, 17);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.textBox2.MaxLength = 3;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(39, 26);
-            this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "123";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tb_ip_2.Location = new System.Drawing.Point(46, 53);
+            this.tb_ip_2.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tb_ip_2.MaxLength = 3;
+            this.tb_ip_2.Name = "tb_ip_2";
+            this.tb_ip_2.Size = new System.Drawing.Size(30, 23);
+            this.tb_ip_2.TabIndex = 1;
+            this.tb_ip_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label3.Location = new System.Drawing.Point(355, 20);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.label3.Location = new System.Drawing.Point(160, 56);
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 20);
+            this.label3.Size = new System.Drawing.Size(13, 17);
             this.label3.TabIndex = 8;
             this.label3.Text = ":";
             // 
-            // textBox3
+            // tb_ip_4
             // 
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.textBox3.Location = new System.Drawing.Point(316, 17);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.textBox3.MaxLength = 3;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(39, 26);
-            this.textBox3.TabIndex = 7;
-            this.textBox3.Text = "777";
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tb_ip_4.Location = new System.Drawing.Point(130, 53);
+            this.tb_ip_4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tb_ip_4.MaxLength = 3;
+            this.tb_ip_4.Name = "tb_ip_4";
+            this.tb_ip_4.Size = new System.Drawing.Size(30, 23);
+            this.tb_ip_4.TabIndex = 3;
+            this.tb_ip_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label4.Location = new System.Drawing.Point(303, 20);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.label4.Location = new System.Drawing.Point(118, 56);
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(13, 20);
+            this.label4.Size = new System.Drawing.Size(13, 17);
             this.label4.TabIndex = 6;
             this.label4.Text = ".";
             // 
-            // textBox4
+            // tb_ip_3
             // 
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.textBox4.Location = new System.Drawing.Point(264, 17);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.textBox4.MaxLength = 3;
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(39, 26);
-            this.textBox4.TabIndex = 5;
-            this.textBox4.Text = "123";
-            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tb_ip_3.Location = new System.Drawing.Point(88, 53);
+            this.tb_ip_3.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tb_ip_3.MaxLength = 3;
+            this.tb_ip_3.Name = "tb_ip_3";
+            this.tb_ip_3.Size = new System.Drawing.Size(30, 23);
+            this.tb_ip_3.TabIndex = 2;
+            this.tb_ip_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox5
+            // tb_port
             // 
-            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.textBox5.Location = new System.Drawing.Point(368, 17);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
-            this.textBox5.MaxLength = 5;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(62, 26);
-            this.textBox5.TabIndex = 9;
-            this.textBox5.Text = "77777";
-            this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_port.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.tb_port.Location = new System.Drawing.Point(172, 53);
+            this.tb_port.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tb_port.MaxLength = 5;
+            this.tb_port.Name = "tb_port";
+            this.tb_port.Size = new System.Drawing.Size(50, 23);
+            this.tb_port.TabIndex = 4;
+            this.tb_port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // button1
+            // lb_wan_inf
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button1.Location = new System.Drawing.Point(12, 91);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(142, 36);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Egy fájl küldése";
-            this.button1.UseVisualStyleBackColor = true;
+            this.lb_wan_inf.BackColor = System.Drawing.Color.Yellow;
+            this.lb_wan_inf.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lb_wan_inf.Location = new System.Drawing.Point(0, 0);
+            this.lb_wan_inf.Margin = new System.Windows.Forms.Padding(0);
+            this.lb_wan_inf.Name = "lb_wan_inf";
+            this.lb_wan_inf.Size = new System.Drawing.Size(70, 20);
+            this.lb_wan_inf.TabIndex = 12;
+            this.lb_wan_inf.Text = "WAN IP:";
+            this.lb_wan_inf.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // button2
+            // lb_wan
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button2.Location = new System.Drawing.Point(12, 147);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(142, 36);
-            this.button2.TabIndex = 11;
-            this.button2.Text = "Több fájl küldése";
-            this.button2.UseVisualStyleBackColor = true;
+            this.lb_wan.BackColor = System.Drawing.Color.Yellow;
+            this.lb_wan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lb_wan.Location = new System.Drawing.Point(70, 0);
+            this.lb_wan.Margin = new System.Windows.Forms.Padding(0);
+            this.lb_wan.Name = "lb_wan";
+            this.lb_wan.Size = new System.Drawing.Size(156, 20);
+            this.lb_wan.TabIndex = 13;
+            this.lb_wan.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // listBox1
+            // lb_lan_inf
             // 
-            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Items.AddRange(new object[] {
+            this.lb_lan_inf.BackColor = System.Drawing.Color.Yellow;
+            this.lb_lan_inf.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lb_lan_inf.Location = new System.Drawing.Point(0, 20);
+            this.lb_lan_inf.Margin = new System.Windows.Forms.Padding(0);
+            this.lb_lan_inf.Name = "lb_lan_inf";
+            this.lb_lan_inf.Size = new System.Drawing.Size(70, 20);
+            this.lb_lan_inf.TabIndex = 14;
+            this.lb_lan_inf.Text = "LAN IP:";
+            this.lb_lan_inf.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lb_lan
+            // 
+            this.lb_lan.BackColor = System.Drawing.Color.Yellow;
+            this.lb_lan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lb_lan.Location = new System.Drawing.Point(70, 20);
+            this.lb_lan.Margin = new System.Windows.Forms.Padding(0);
+            this.lb_lan.Name = "lb_lan";
+            this.lb_lan.Size = new System.Drawing.Size(156, 20);
+            this.lb_lan.TabIndex = 15;
+            this.lb_lan.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel
+            // 
+            this.panel.Controls.Add(this.bt_more_info);
+            this.panel.Controls.Add(this.bt_one_info);
+            this.panel.Controls.Add(this.lb_files);
+            this.panel.Controls.Add(this.bt_more_send);
+            this.panel.Controls.Add(this.bt_one_send);
+            this.panel.Enabled = false;
+            this.panel.Location = new System.Drawing.Point(0, 121);
+            this.panel.Margin = new System.Windows.Forms.Padding(0);
+            this.panel.Name = "panel";
+            this.panel.Size = new System.Drawing.Size(226, 293);
+            this.panel.TabIndex = 16;
+            // 
+            // bt_more_info
+            // 
+            this.bt_more_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_more_info.Location = new System.Drawing.Point(185, 47);
+            this.bt_more_info.Name = "bt_more_info";
+            this.bt_more_info.Size = new System.Drawing.Size(30, 30);
+            this.bt_more_info.TabIndex = 14;
+            this.bt_more_info.Text = "?";
+            this.bt_more_info.UseVisualStyleBackColor = true;
+            this.bt_more_info.Click += new System.EventHandler(this.bt_more_info_Click);
+            // 
+            // bt_one_info
+            // 
+            this.bt_one_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_one_info.Location = new System.Drawing.Point(185, 5);
+            this.bt_one_info.Name = "bt_one_info";
+            this.bt_one_info.Size = new System.Drawing.Size(30, 30);
+            this.bt_one_info.TabIndex = 12;
+            this.bt_one_info.Text = "?";
+            this.bt_one_info.UseVisualStyleBackColor = true;
+            this.bt_one_info.Click += new System.EventHandler(this.bt_one_info_Click);
+            // 
+            // lb_files
+            // 
+            this.lb_files.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lb_files.FormattingEnabled = true;
+            this.lb_files.ItemHeight = 20;
+            this.lb_files.Items.AddRange(new object[] {
             "asd.txt",
             "secret.part1",
             "secret.part2",
             "secret.crc"});
-            this.listBox1.Location = new System.Drawing.Point(160, 147);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(195, 224);
-            this.listBox1.TabIndex = 12;
+            this.lb_files.Location = new System.Drawing.Point(12, 86);
+            this.lb_files.Name = "lb_files";
+            this.lb_files.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.lb_files.Size = new System.Drawing.Size(201, 204);
+            this.lb_files.TabIndex = 15;
+            this.lb_files.DoubleClick += new System.EventHandler(this.lb_files_DoubleClick);
+            this.lb_files.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lb_files_MouseDown);
             // 
-            // button3
+            // bt_more_send
             // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button3.Location = new System.Drawing.Point(12, 189);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(142, 36);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "Hozzáad listához";
-            this.button3.UseVisualStyleBackColor = true;
+            this.bt_more_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_more_send.Location = new System.Drawing.Point(42, 44);
+            this.bt_more_send.Name = "bt_more_send";
+            this.bt_more_send.Size = new System.Drawing.Size(141, 36);
+            this.bt_more_send.TabIndex = 13;
+            this.bt_more_send.Text = "Több fájl küldése";
+            this.bt_more_send.UseVisualStyleBackColor = true;
+            this.bt_more_send.Click += new System.EventHandler(this.bt_more_send_Click);
             // 
-            // button4
+            // bt_one_send
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.button4.Location = new System.Drawing.Point(12, 231);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(142, 36);
-            this.button4.TabIndex = 14;
-            this.button4.Text = "Töröl listából";
-            this.button4.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.BackColor = System.Drawing.Color.LimeGreen;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label6.Location = new System.Drawing.Point(520, 53);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(208, 33);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "WAN IP: 255.255.255.255";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label7
-            // 
-            this.label7.BackColor = System.Drawing.Color.Red;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label7.Location = new System.Drawing.Point(520, 20);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(208, 33);
-            this.label7.TabIndex = 17;
-            this.label7.Text = "LAN IP: 127.0.0.1";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.bt_one_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_one_send.Location = new System.Drawing.Point(42, 2);
+            this.bt_one_send.Name = "bt_one_send";
+            this.bt_one_send.Size = new System.Drawing.Size(141, 36);
+            this.bt_one_send.TabIndex = 11;
+            this.bt_one_send.Text = "Egy fájl küldése";
+            this.bt_one_send.UseVisualStyleBackColor = true;
+            this.bt_one_send.Click += new System.EventHandler(this.bt_one_send_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 476);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox5);
+            this.ClientSize = new System.Drawing.Size(226, 414);
+            this.Controls.Add(this.panel);
+            this.Controls.Add(this.lb_lan);
+            this.Controls.Add(this.lb_lan_inf);
+            this.Controls.Add(this.lb_wan);
+            this.Controls.Add(this.lb_wan_inf);
+            this.Controls.Add(this.tb_port);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.tb_ip_4);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.tb_ip_3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.tb_ip_2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.bt_csatlakoz);
+            this.Controls.Add(this.tb_ip_1);
+            this.Controls.Add(this.bt_connect);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "SP2P";
+            this.panel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,23 +315,26 @@
 
         #endregion
 
-        private System.Windows.Forms.Button bt_csatlakoz;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button bt_connect;
+        private System.Windows.Forms.TextBox tb_ip_1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tb_ip_2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox tb_ip_4;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tb_ip_3;
+        private System.Windows.Forms.TextBox tb_port;
+        private System.Windows.Forms.Label lb_wan_inf;
+        private System.Windows.Forms.Label lb_wan;
+        private System.Windows.Forms.Label lb_lan_inf;
+        private System.Windows.Forms.Label lb_lan;
+        private System.Windows.Forms.Panel panel;
+        private System.Windows.Forms.Button bt_more_info;
+        private System.Windows.Forms.Button bt_one_info;
+        private System.Windows.Forms.ListBox lb_files;
+        private System.Windows.Forms.Button bt_more_send;
+        private System.Windows.Forms.Button bt_one_send;
     }
 }
 

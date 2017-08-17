@@ -157,7 +157,7 @@ namespace SP2P
     class IPChangedEventArgs : EventArgs
     {
         public IPAddress PublicIP { get; }
-        public IPAddress PrivateIPs { get; }
+        public IPAddress PrivateIP { get; }
         public bool PublicIpIsNone { get; }
         public bool PrivateIpIsLoopback { get; }
 
@@ -165,7 +165,7 @@ namespace SP2P
         public IPChangedEventArgs(IPAddress pub_ip, IPAddress priv_ip, bool pub_ip_n, bool priv_ip_l)
         {
             PublicIP = pub_ip;
-            PrivateIPs = priv_ip;
+            PrivateIP = priv_ip;
             PublicIpIsNone = pub_ip_n;
             PrivateIpIsLoopback = priv_ip_l;
         }
