@@ -32,6 +32,14 @@ namespace SP2P
         {
             get
             {
+                //bool lp = false;
+                //foreach (var item in PrivateIPs)
+                //{
+                //    lp |= IPAddress.IsLoopback(item);
+                //}
+                //return lp;
+                //return true;
+
                 return IPAddress.IsLoopback(PrivateIP);
             }
         }
