@@ -15,6 +15,7 @@ namespace SP2P
         public Form1()
         {
             InitializeComponent();
+            BackColor = Color.Red;
         }
     }
 }
