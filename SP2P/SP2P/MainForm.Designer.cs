@@ -48,6 +48,8 @@
             this.lb_files = new System.Windows.Forms.ListBox();
             this.bt_more_send = new System.Windows.Forms.Button();
             this.bt_one_send = new System.Windows.Forms.Button();
+            this.ofd = new System.Windows.Forms.OpenFileDialog();
+            this.bt_settings = new System.Windows.Forms.Button();
             this.panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,6 +74,7 @@
             this.tb_ip_1.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_1.TabIndex = 0;
             this.tb_ip_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_1.TextChanged += new System.EventHandler(this.tb_ip_1_TextChanged);
             // 
             // label1
             // 
@@ -81,7 +84,7 @@
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(13, 17);
-            this.label1.TabIndex = 2;
+            this.label1.TabIndex = 0;
             this.label1.Text = ".";
             // 
             // label2
@@ -92,7 +95,7 @@
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(13, 17);
-            this.label2.TabIndex = 4;
+            this.label2.TabIndex = 0;
             this.label2.Text = ".";
             // 
             // tb_ip_2
@@ -105,6 +108,7 @@
             this.tb_ip_2.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_2.TabIndex = 1;
             this.tb_ip_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_2.TextChanged += new System.EventHandler(this.tb_ip_2_TextChanged);
             // 
             // label3
             // 
@@ -114,7 +118,7 @@
             this.label3.Margin = new System.Windows.Forms.Padding(0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(13, 17);
-            this.label3.TabIndex = 8;
+            this.label3.TabIndex = 0;
             this.label3.Text = ":";
             // 
             // tb_ip_4
@@ -127,6 +131,7 @@
             this.tb_ip_4.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_4.TabIndex = 3;
             this.tb_ip_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_4.TextChanged += new System.EventHandler(this.tb_ip_4_TextChanged);
             // 
             // label4
             // 
@@ -136,7 +141,7 @@
             this.label4.Margin = new System.Windows.Forms.Padding(0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(13, 17);
-            this.label4.TabIndex = 6;
+            this.label4.TabIndex = 0;
             this.label4.Text = ".";
             // 
             // tb_ip_3
@@ -149,6 +154,7 @@
             this.tb_ip_3.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_3.TabIndex = 2;
             this.tb_ip_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_3.TextChanged += new System.EventHandler(this.tb_ip_3_TextChanged);
             // 
             // tb_port
             // 
@@ -160,6 +166,7 @@
             this.tb_port.Size = new System.Drawing.Size(50, 23);
             this.tb_port.TabIndex = 4;
             this.tb_port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_port.TextChanged += new System.EventHandler(this.tb_port_TextChanged);
             // 
             // lb_wan_inf
             // 
@@ -169,7 +176,7 @@
             this.lb_wan_inf.Margin = new System.Windows.Forms.Padding(0);
             this.lb_wan_inf.Name = "lb_wan_inf";
             this.lb_wan_inf.Size = new System.Drawing.Size(70, 20);
-            this.lb_wan_inf.TabIndex = 12;
+            this.lb_wan_inf.TabIndex = 0;
             this.lb_wan_inf.Text = "WAN IP:";
             this.lb_wan_inf.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -181,7 +188,7 @@
             this.lb_wan.Margin = new System.Windows.Forms.Padding(0);
             this.lb_wan.Name = "lb_wan";
             this.lb_wan.Size = new System.Drawing.Size(156, 20);
-            this.lb_wan.TabIndex = 13;
+            this.lb_wan.TabIndex = 0;
             this.lb_wan.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lb_lan_inf
@@ -192,7 +199,7 @@
             this.lb_lan_inf.Margin = new System.Windows.Forms.Padding(0);
             this.lb_lan_inf.Name = "lb_lan_inf";
             this.lb_lan_inf.Size = new System.Drawing.Size(70, 20);
-            this.lb_lan_inf.TabIndex = 14;
+            this.lb_lan_inf.TabIndex = 0;
             this.lb_lan_inf.Text = "LAN IP:";
             this.lb_lan_inf.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -204,7 +211,7 @@
             this.lb_lan.Margin = new System.Windows.Forms.Padding(0);
             this.lb_lan.Name = "lb_lan";
             this.lb_lan.Size = new System.Drawing.Size(156, 20);
-            this.lb_lan.TabIndex = 15;
+            this.lb_lan.TabIndex = 0;
             this.lb_lan.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel
@@ -227,7 +234,7 @@
             this.bt_more_info.Location = new System.Drawing.Point(185, 47);
             this.bt_more_info.Name = "bt_more_info";
             this.bt_more_info.Size = new System.Drawing.Size(30, 30);
-            this.bt_more_info.TabIndex = 14;
+            this.bt_more_info.TabIndex = 10;
             this.bt_more_info.Text = "?";
             this.bt_more_info.UseVisualStyleBackColor = true;
             this.bt_more_info.Click += new System.EventHandler(this.bt_more_info_Click);
@@ -238,7 +245,7 @@
             this.bt_one_info.Location = new System.Drawing.Point(185, 5);
             this.bt_one_info.Name = "bt_one_info";
             this.bt_one_info.Size = new System.Drawing.Size(30, 30);
-            this.bt_one_info.TabIndex = 12;
+            this.bt_one_info.TabIndex = 8;
             this.bt_one_info.Text = "?";
             this.bt_one_info.UseVisualStyleBackColor = true;
             this.bt_one_info.Click += new System.EventHandler(this.bt_one_info_Click);
@@ -257,7 +264,7 @@
             this.lb_files.Name = "lb_files";
             this.lb_files.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lb_files.Size = new System.Drawing.Size(201, 204);
-            this.lb_files.TabIndex = 15;
+            this.lb_files.TabIndex = 11;
             this.lb_files.DoubleClick += new System.EventHandler(this.lb_files_DoubleClick);
             this.lb_files.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lb_files_MouseDown);
             // 
@@ -267,7 +274,7 @@
             this.bt_more_send.Location = new System.Drawing.Point(42, 44);
             this.bt_more_send.Name = "bt_more_send";
             this.bt_more_send.Size = new System.Drawing.Size(141, 36);
-            this.bt_more_send.TabIndex = 13;
+            this.bt_more_send.TabIndex = 9;
             this.bt_more_send.Text = "Több fájl küldése";
             this.bt_more_send.UseVisualStyleBackColor = true;
             this.bt_more_send.Click += new System.EventHandler(this.bt_more_send_Click);
@@ -278,16 +285,32 @@
             this.bt_one_send.Location = new System.Drawing.Point(42, 2);
             this.bt_one_send.Name = "bt_one_send";
             this.bt_one_send.Size = new System.Drawing.Size(141, 36);
-            this.bt_one_send.TabIndex = 11;
+            this.bt_one_send.TabIndex = 7;
             this.bt_one_send.Text = "Egy fájl küldése";
             this.bt_one_send.UseVisualStyleBackColor = true;
             this.bt_one_send.Click += new System.EventHandler(this.bt_one_send_Click);
             // 
-            // Form1
+            // ofd
+            // 
+            this.ofd.FileName = "openFileDialog1";
+            // 
+            // bt_settings
+            // 
+            this.bt_settings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_settings.Location = new System.Drawing.Point(185, 85);
+            this.bt_settings.Name = "bt_settings";
+            this.bt_settings.Size = new System.Drawing.Size(30, 30);
+            this.bt_settings.TabIndex = 6;
+            this.bt_settings.Text = "B";
+            this.bt_settings.UseVisualStyleBackColor = true;
+            this.bt_settings.Click += new System.EventHandler(this.bt_settings_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(226, 414);
+            this.Controls.Add(this.bt_settings);
             this.Controls.Add(this.panel);
             this.Controls.Add(this.lb_lan);
             this.Controls.Add(this.lb_lan_inf);
@@ -305,7 +328,8 @@
             this.Controls.Add(this.bt_connect);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SP2P";
             this.panel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -335,6 +359,8 @@
         private System.Windows.Forms.ListBox lb_files;
         private System.Windows.Forms.Button bt_more_send;
         private System.Windows.Forms.Button bt_one_send;
+        private System.Windows.Forms.OpenFileDialog ofd;
+        private System.Windows.Forms.Button bt_settings;
     }
 }
 
