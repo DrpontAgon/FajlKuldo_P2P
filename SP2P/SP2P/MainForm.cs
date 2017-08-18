@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace SP2P
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         bool connected = false;
         List<string> file_paths = new List<string>();
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
             IPChangeChecker.IPChanged += IPChangeEventMethod;

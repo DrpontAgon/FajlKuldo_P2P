@@ -18,7 +18,17 @@ namespace SP2P
     /// </summary>
     static class IPLogger
     {
-        private static string fpath = "IPLog.ipd";
+        /// <summary>
+        /// Statikus konstruktor, program indításakor fut le és beállítja az alapértelmezett
+        /// helyét (és nevét) a log fájlnak. Az alapértelmezett hely azt a mappát jelenti
+        /// ahol a futtatható állomány is megtalálható
+        /// </summary>
+        static IPLogger()
+        {
+            Fpath = "IPLog.ipd";
+        }
+
+        public static string Fpath { get; set; }
 
         /// <summary>
         /// Függvény neve magáért beszél, elkészíti a fájlt és
@@ -27,7 +37,7 @@ namespace SP2P
         /// <param name="ip"> Megadott ip cím </param>
         public static void ResetLogToThisIP(this IPAddress ip)
         {
-            using (FileStream f = new FileStream(fpath, FileMode.Create))
+            using (FileStream f = new FileStream(Fpath, FileMode.Create))
             {
                 f.Write(ip.GetAddressBytes(), 0, 4);
             }
@@ -41,7 +51,7 @@ namespace SP2P
         /// <param name="ip"> Megadott ip cím </param>
         public static void CheckAndLogIP(this IPAddress ip)
         {
-            if (File.Exists(fpath))
+            if (File.Exists(Fpath))
             {
                 if (CheckIp(ip)) LogIp(ip);
             }
@@ -56,7 +66,7 @@ namespace SP2P
         /// <returns> Logikai érték, igaz, ha nem egyezik az ip, azaz el kell menteni </returns>
         private static bool CheckIp(IPAddress ip)
         {
-            FileStream f = new FileStream(fpath, FileMode.Open);
+            FileStream f = new FileStream(Fpath, FileMode.Open);
             byte[] arr = new byte[4];
             f.Read(arr, 0, 4);
             f.Close();
@@ -72,8 +82,8 @@ namespace SP2P
         /// <param name="ip"> Megadott ip cím </param>
         private static void LogIp(IPAddress ip)
         {
-            byte[] arr = File.ReadAllBytes(fpath);
-            using (FileStream f = new FileStream(fpath, FileMode.Create))
+            byte[] arr = File.ReadAllBytes(Fpath);
+            using (FileStream f = new FileStream(Fpath, FileMode.Create))
             {
                 f.Write(ip.GetAddressBytes(), 0, 4);
                 f.Write(arr, 0, arr.Length);

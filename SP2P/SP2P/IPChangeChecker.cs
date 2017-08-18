@@ -14,7 +14,7 @@ namespace SP2P
     /// 
     /// Általános használata:
     /// 
-    /// IPChangeChecker.IPChanged += EventMetodus , ahol
+    /// IPChangeChecker.IPChanged += EventMetodus, ahol
     /// private void Eventmetodus(object sender, IPChangedEventArgs e) { ... }
     /// 
     /// vagy 
@@ -75,10 +75,7 @@ namespace SP2P
         }
 
         /// <summary>
-        /// Függvény neve magáért beszél, az összes interface-en ellenőrzéseket végez (például
-        /// Default Gateway cím meg-e van adva ugyanis csak a megfelelő IP címnek van ez)
-        /// és ez alapján visszaadja a megfelelő IP címet.
-        /// Két foreach ciklus a nyelv által kezelt lehetséges interfészeken,
+        /// Függvény neve magáért beszél, a két foreach ciklus a nyelv által kezelt lehetséges interfészeken,
         /// illetve a hardvereken megy keresztül. Benne az első "if" ellenőrzi, hogy az a típusú interfész
         /// működik-e, azaz tud adatokat küldeni. Ha igen, akkor a második "if" ellenőrzi, hogy
         /// ahhoz tartozik-e egy gateway cím. Ha igen, akkor az ahhoz tartozó összes IP közül ki kell
