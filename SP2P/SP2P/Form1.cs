@@ -38,7 +38,7 @@ namespace SP2P
         private void bt_connect_Click(object sender, EventArgs e)
         {
             connected = !connected;
-            bt_connect.Text = connected ? "Lecsatlakozás" : "Csatlakozás";
+            bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
             panel.Enabled = connected;
         }
 
@@ -59,7 +59,12 @@ namespace SP2P
 
         private void bt_more_info_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Lista:\n\tBal egérgomb: Kijelölés.\n\tBal egérgomb + Ctrl: Több kijelölés.\n\tBal egérgomb + Shift: Kijelölttől kurzorig kijelölés.\n\tDupla Bal egérgomb: Fájl hozzáadása a listához.\n\tJobb egérgomb: Kijelöltek törlése.\n\nA \"Több fájl küldése\" gomb: Összes listában szereplő fájl küldése.", "Információk");
+            MessageBox.Show("Lista:\n\tBal egérgomb: Kijelölés." +
+                                  "\n\tBal egérgomb + Ctrl: Több kijelölés." +
+                                  "\n\tBal egérgomb + Shift: Kijelölttől kurzorig kijelölés." +
+                                  "\n\tDupla Bal egérgomb: Fájl hozzáadása a listához." +
+                                  "\n\tJobb egérgomb: Kijelöltek törlése." +
+                                  "\n\nA \"Több fájl küldése\" gomb: Összes listában szereplő fájl küldése.", "Információk");
         }
 
         private void lb_files_MouseDown(object sender, MouseEventArgs e)
