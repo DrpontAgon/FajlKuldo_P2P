@@ -104,21 +104,6 @@ namespace SP2P
             }
         }
 
-        //public static void SetIPOrName(this string name, IPAddress ip)
-        //{
-        //    if (GetIPOrNamesIfExist(name, out IPAddress unused, out int index))
-        //    {
-        //        string[] lines = File.ReadAllLines(Fpath, Encoding.Default);
-        //        lines[index] = IPAndNameLine(ip, name);
-        //        File.WriteAllLines(Fpath, lines, Encoding.Default);
-        //    }
-        //    else
-        //    {
-        //        using (StreamWriter f = new StreamWriter(Fpath, true, Encoding.Default))
-        //            f.WriteLine(IPAndNameLine(ip, name));
-        //    }
-        //}
-
         public static void RemoveIPOrName(this IPAddress ip)
         {
             if (GetIPOrNamesIfExist(ip, out string unused, out int index))
@@ -156,9 +141,7 @@ namespace SP2P
 
         public static SortedDictionary<IPAddress, string> GetAllIPNamesSorted()
         {
-            //IComparer<IPAddress> comparer = new IPAddressComparer();
-            Comparer<IPAddress> comparer = new IPAddressComparer();
-            return new SortedDictionary<IPAddress, string>(GetAllIPNames(), comparer);
+            return new SortedDictionary<IPAddress, string>(GetAllIPNames(), new IPAddressComparer());
         }
     }
 
@@ -171,14 +154,6 @@ namespace SP2P
             return BitConverter.ToUInt32(x, 0);
         }
     }
-
-    //public class IPAddressComparer : IComparer<IPAddress>
-    //{
-    //    int IComparer<IPAddress>.Compare(IPAddress ip1, IPAddress ip2)
-    //    {
-    //        return ip1.ToUInt32().CompareTo(ip2.ToUInt32());
-    //    }
-    //}
 
     public class IPAddressComparer : Comparer<IPAddress>
     {
