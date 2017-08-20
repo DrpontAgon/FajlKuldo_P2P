@@ -21,7 +21,7 @@ namespace SP2P
         /// <summary>
         /// Statikus konstruktor, program indításakor fut le és beállítja az alapértelmezett
         /// helyét (és nevét) a log fájlnak. Az alapértelmezett hely azt a mappát jelenti
-        /// ahol a futtatható állomány is megtalálható
+        /// ahol a futtatható állomány is megtalálható.
         /// </summary>
         static IPLogger()
         {
