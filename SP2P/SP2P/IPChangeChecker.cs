@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Készítette és felelősséget vállal: Tóth Ákos
+// Potenciális ötletadók és módosítók: Bense Viktor, Csaholczi Atilla
+
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -7,6 +10,7 @@ using System.Net.Sockets;
 namespace SP2P
 {
     /// <summary>
+    /// 
     /// IPChangeChecker célja, hogy érzékelje az IP cím változásait, és ez eventként kezelődik,
     /// azaz köthető hozzá kód, ami csak akkor fut le, ha éppen változott az IP (és nem kell
     /// feleslegesen megadott időintervallumban ellenőrizni azt). Ez az osztály visszaadja a
@@ -36,8 +40,10 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// Statikus konstruktor, Beállítja a NetworkChange két eventjére
         /// ugyanazt a metódust.
+        /// 
         /// </summary>
         static IPChangeChecker()
         {
@@ -50,7 +56,9 @@ namespace SP2P
         public static IPAddress PrivateIP { get; private set; }
 
         /// <summary>
+        /// 
         /// Loopback = 127.0.0.1 (= localhost)
+        /// 
         /// </summary>
         public static bool PrivateIpIsLoopback
         {
@@ -58,7 +66,9 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// None = 255.255.255.255
+        /// 
         /// </summary>
         public static bool PublicIpIsNone
         {
@@ -66,8 +76,10 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// Kényszerített ellenőrzés, meghívja a NetworkChange eventjeihez
         /// kapcsolt metódust paraméterek nélkül.
+        /// 
         /// </summary>
         public static void ForceCheck()
         {
@@ -75,11 +87,13 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// Függvény neve magáért beszél, a két foreach ciklus a nyelv által kezelt lehetséges interfészeken,
         /// illetve a hardvereken megy keresztül. Benne az első "if" ellenőrzi, hogy az a típusú interfész
         /// működik-e, azaz tud adatokat küldeni. Ha igen, akkor a második "if" ellenőrzi, hogy
         /// ahhoz tartozik-e egy gateway cím. Ha igen, akkor az ahhoz tartozó összes IP közül ki kell
         /// választani az IPv4-eset.
+        /// 
         /// </summary>
         /// <returns> LAN IP cím, sikertelen lekéréskor a Loopback / localhost cím </returns>
         private static IPAddress GetLocalIPv4()
@@ -108,11 +122,13 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// Függvény neve magáért beszél, időtúllépes képességgel módosított WebClient-tel
         /// letöltődik az oldal tartalma ami az IP cím, viszont tartalmaz egy sortörést,
         /// a végén ezért azt el kell távolítani, és végül át kell alakítani IPAddress-re.
         /// Exception-nel elszállna, ha nincs internet vagy a megadott 5 másodperc alatt
         /// nem töltődik le az adat (ami gyakorlatilag azt jelenti hogy nincs internet).
+        /// 
         /// </summary>
         /// <returns> WAN IP cím, sikertelen lekéréskor a None cím </returns>
         private static IPAddress GetPublicIPv4()
@@ -129,8 +145,10 @@ namespace SP2P
         }
 
         /// <summary>
+        /// 
         /// NetworkChange eventjeihez kötött metódus, célja megszerezni az IP címeket
         /// és lőni az IPChanged eventet.
+        /// 
         /// </summary>
         /// <param name="sender"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
         /// <param name="e"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
@@ -145,10 +163,12 @@ namespace SP2P
     delegate void IPChangedEventHandler(object sender, IPChangedEventArgs e);
 
     /// <summary>
+    /// 
     /// IPChanged event argumentumai (metódusban általában e változó), az
     /// IP címek és lehetséges állapotaik így metódouson belül lokálisan elérhető.
     /// Nem biztos, hogy szükséges ez, mert statikusan is elérhetőek ezek az adatok a
     /// fő osztályból. Esetleg változás ellenőrzésre lehet használni.
+    /// 
     /// </summary>
     class IPChangedEventArgs : EventArgs
     {
@@ -168,8 +188,10 @@ namespace SP2P
     }
 
     /// <summary>
+    /// 
     /// Letöltött osztály, lényege, hogy úgy módosítja a WebClient osztályt, hogy
     /// egyszerűen használható az időtúllépés funkciója.
+    /// 
     /// </summary>
     public class WebDownload : WebClient
     {

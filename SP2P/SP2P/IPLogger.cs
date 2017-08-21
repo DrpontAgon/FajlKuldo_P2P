@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿// Készítette és felelősséget vállal: Tóth Ákos
+// Potenciális ötletadók és módosítók: Bense Viktor, Csaholczi Atilla
+
+using System.Net;
 using System.IO;
 
 namespace SP2P

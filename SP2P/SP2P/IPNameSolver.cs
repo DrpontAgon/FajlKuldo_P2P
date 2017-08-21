@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Készítette és felelősséget vállal: Tóth Ákos
+// Potenciális ötletadók és módosítók: Bense Viktor, Csaholczi Atilla
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
