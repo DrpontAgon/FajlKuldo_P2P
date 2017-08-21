@@ -128,7 +128,7 @@ namespace SP2P
             }
             ips = l_ips.ToArray();
             indices = l_indices.ToArray();
-            return name != string.Empty;
+            return ips.Length != 0;
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace SP2P
         /// kulcs-érték párokban, IP cím szerint növekvő sorrendben.
         /// 
         /// </summary>
-        // <returns> Az összes bejegyzés kulcs-érték párokban, sorrendben </returns>
+        /// <returns> Az összes bejegyzés kulcs-érték párokban, sorrendben </returns>
         public static SortedDictionary<IPAddress, string> GetAllIPAndNamesSorted()
         {
             return new SortedDictionary<IPAddress, string>(GetAllIPAndNames(), new IPAddressComparer());
