@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,11 +21,6 @@ namespace SP2P
             InitializeComponent();
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
-
-            file_paths.Add("asd.txt");
-            file_paths.Add("secret.part1");
-            file_paths.Add("secret.part2");
-            file_paths.Add("secret.crc");
         }
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
@@ -33,21 +29,37 @@ namespace SP2P
             lb_lan_inf.BackColor = lb_lan.BackColor = e.PrivateIpIsLoopback ? Color.Red : Color.LimeGreen;
             lb_wan.Text = e.PublicIP.ToString();
             lb_lan.Text = e.PrivateIP.ToString();
+            //e.PublicIP.CheckAndLogIP();
         }
 
         private void bt_connect_Click(object sender, EventArgs e)
         {
-            connected = !connected;
-            bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
-            panel.Enabled = connected;
+            string s_ip = $"{tb_ip_1.Text}.{tb_ip_2.Text}.{tb_ip_3.Text}.{tb_ip_4.Text}";
+            if (IPAddress.TryParse(s_ip, out IPAddress ip) && ushort.TryParse(tb_port.Text, out ushort port))
+            {
+                connected = !connected;
+                bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
+                panel.Enabled = connected;
+                //c# 7.0: így ip és port változó használható
+            }
         }
 
         private void bt_one_send_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ofd.Multiselect = false;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                string fpath = ofd.FileName;
+                throw new NotImplementedException();
+            }
         }
 
         private void bt_more_send_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void bt_settings_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
@@ -83,7 +95,43 @@ namespace SP2P
 
         private void lb_files_DoubleClick(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var item in ofd.FileNames)
+                {
+                    file_paths.Add(item);
+                }
+                foreach (var item in ofd.SafeFileNames)
+                {
+                    lb_files.Items.Add(item);
+                }
+            }
+        }
+
+        private void tb_ip_1_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_ip_1.Text.Length == 3) tb_ip_2.Focus();
+        }
+
+        private void tb_ip_2_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_ip_2.Text.Length == 3) tb_ip_3.Focus();
+        }
+
+        private void tb_ip_3_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_ip_3.Text.Length == 3) tb_ip_4.Focus();
+        }
+
+        private void tb_ip_4_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_ip_4.Text.Length == 3) tb_port.Focus();
+        }
+
+        private void tb_port_TextChanged(object sender, EventArgs e)
+        {
+            if (tb_port.Text.Length == 5) bt_connect.Focus();
         }
     }
 }
