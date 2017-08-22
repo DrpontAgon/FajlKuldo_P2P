@@ -1,4 +1,4 @@
-﻿// Készítette és felelősséget vállal: Tóth Ákos
+﻿// Készítette és a kódot fenttartja: Tóth Ákos
 // Potenciális ötletadók és módosítók: Bense Viktor, Csaholczi Atilla
 
 using System.Net;
