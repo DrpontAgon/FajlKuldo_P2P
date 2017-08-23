@@ -40,7 +40,6 @@ namespace SP2P
                 connected = !connected;
                 bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
                 panel.Enabled = connected;
-                //c# 7.0: így ip és port változó használható
             }
         }
 
