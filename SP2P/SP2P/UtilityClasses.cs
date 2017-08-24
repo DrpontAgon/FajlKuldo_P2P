@@ -51,8 +51,8 @@ namespace SP2P
     {
         /// <summary>
         /// 
-        /// A függvény feladata hogy visszadja a korrekt pozitív egész számot ami, reprezentálja az IP címet.
-        /// Memóriakezelési és átváltási okokból a szám típúsok a memóriában bájtonként
+        /// A függvény feladata, hogy visszadja a korrekt pozitív egész számot, ami reprezentálja az IP címet.
+        /// Memóriakezelési és átváltási okokból a szám típusok a memóriában bájtonként
         /// fordítva vannak tárolva, és ezt a beépített típusfordítók nem veszik figyelembe,
         /// ezzel azt elérve, hogy az IP címet reprezentáló szám nincs helyes sorrendben.
         /// 
@@ -79,7 +79,7 @@ namespace SP2P
     /// 
     /// IPAddress-t összehasonlító osztály, az általános összehasonlító osztályból származtatva,
     /// egyetlen kötelezően implementált függvénnyel. Célja az olyan függvények kielégítése,
-    /// ahol szükséges egy összehasonlító, és az összehasonlítandó adatok, amik IPAddress típusúak.
+    /// ahol szükséges egy összehasonlító és az összehasonlítandó adatok, amik IPAddress típusúak.
     /// 
     /// </summary>
     public class IPAddressComparer : Comparer<IPAddress>
