@@ -1,12 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Open.Nat;
 using System.Threading;
 using System.Windows.Forms;
+using Open.Nat;
 
 namespace SP2P
 {
     class PortOpener
     {
+        /*[DllImport("OpenNat.dll",CallingConvention = CallingConvention.Winapi)]
+        private static extern */
         public static async Task<NatDevice> GetConnectedDevice()
         {
             var discoverer = new NatDiscoverer();
