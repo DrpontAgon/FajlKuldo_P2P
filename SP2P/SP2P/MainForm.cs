@@ -25,10 +25,10 @@ namespace SP2P
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
         {
-            lb_wan_inf.BackColor = lb_wan.BackColor = e.PublicIpIsNone ? Color.Red : Color.LimeGreen;
-            lb_lan_inf.BackColor = lb_lan.BackColor = e.PrivateIpIsLoopback ? Color.Red : Color.LimeGreen;
-            lb_wan.Text = e.PublicIP.ToString();
-            lb_lan.Text = e.PrivateIP.ToString();
+            lb_wan_inf.BackColor = lb_wan.BackColor = IPChangeChecker.PublicIpIsNone ? Color.Red : Color.LimeGreen;
+            lb_lan_inf.BackColor = lb_lan.BackColor = IPChangeChecker.PrivateIpIsLoopback ? Color.Red : Color.LimeGreen;
+            lb_wan.Text = IPChangeChecker.PublicIP.ToString();
+            lb_lan.Text = IPChangeChecker.PrivateIP.ToString();
             //e.PublicIP.CheckAndLogIP();
         }
 
@@ -60,7 +60,7 @@ namespace SP2P
 
         private void bt_settings_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
 
         private void bt_one_info_Click(object sender, EventArgs e)
@@ -131,6 +131,16 @@ namespace SP2P
         private void tb_port_TextChanged(object sender, EventArgs e)
         {
             if (tb_port.Text.Length == 5) bt_connect.Focus();
+        }
+
+        private void cms_item_ip_Click(object sender, EventArgs e)
+        {
+            IPChangeChecker.ForceCheck();
+        }
+
+        private void cms_item_settings_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

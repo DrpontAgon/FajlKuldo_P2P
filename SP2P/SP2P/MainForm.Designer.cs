@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.bt_connect = new System.Windows.Forms.Button();
             this.tb_ip_1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,8 +50,11 @@
             this.bt_more_send = new System.Windows.Forms.Button();
             this.bt_one_send = new System.Windows.Forms.Button();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
-            this.bt_settings = new System.Windows.Forms.Button();
+            this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cms_item_ip = new System.Windows.Forms.ToolStripMenuItem();
+            this.cms_item_settings = new System.Windows.Forms.ToolStripMenuItem();
             this.panel.SuspendLayout();
+            this.cms.SuspendLayout();
             this.SuspendLayout();
             // 
             // bt_connect
@@ -255,11 +259,6 @@
             this.lb_files.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lb_files.FormattingEnabled = true;
             this.lb_files.ItemHeight = 20;
-            this.lb_files.Items.AddRange(new object[] {
-            "asd.txt",
-            "secret.part1",
-            "secret.part2",
-            "secret.crc"});
             this.lb_files.Location = new System.Drawing.Point(12, 86);
             this.lb_files.Name = "lb_files";
             this.lb_files.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -294,23 +293,34 @@
             // 
             this.ofd.FileName = "openFileDialog1";
             // 
-            // bt_settings
+            // cms
             // 
-            this.bt_settings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.bt_settings.Location = new System.Drawing.Point(185, 85);
-            this.bt_settings.Name = "bt_settings";
-            this.bt_settings.Size = new System.Drawing.Size(30, 30);
-            this.bt_settings.TabIndex = 6;
-            this.bt_settings.Text = "B";
-            this.bt_settings.UseVisualStyleBackColor = true;
-            this.bt_settings.Click += new System.EventHandler(this.bt_settings_Click);
+            this.cms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cms_item_ip,
+            this.cms_item_settings});
+            this.cms.Name = "cms";
+            this.cms.Size = new System.Drawing.Size(168, 48);
+            // 
+            // cms_item_ip
+            // 
+            this.cms_item_ip.Name = "cms_item_ip";
+            this.cms_item_ip.Size = new System.Drawing.Size(167, 22);
+            this.cms_item_ip.Text = "IP címek frissítése";
+            this.cms_item_ip.Click += new System.EventHandler(this.cms_item_ip_Click);
+            // 
+            // cms_item_settings
+            // 
+            this.cms_item_settings.Name = "cms_item_settings";
+            this.cms_item_settings.Size = new System.Drawing.Size(167, 22);
+            this.cms_item_settings.Text = "Beállítások";
+            this.cms_item_settings.Click += new System.EventHandler(this.cms_item_settings_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(226, 414);
-            this.Controls.Add(this.bt_settings);
+            this.ContextMenuStrip = this.cms;
             this.Controls.Add(this.panel);
             this.Controls.Add(this.lb_lan);
             this.Controls.Add(this.lb_lan_inf);
@@ -332,6 +342,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SP2P";
             this.panel.ResumeLayout(false);
+            this.cms.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -360,7 +371,9 @@
         private System.Windows.Forms.Button bt_more_send;
         private System.Windows.Forms.Button bt_one_send;
         private System.Windows.Forms.OpenFileDialog ofd;
-        private System.Windows.Forms.Button bt_settings;
+        private System.Windows.Forms.ContextMenuStrip cms;
+        private System.Windows.Forms.ToolStripMenuItem cms_item_ip;
+        private System.Windows.Forms.ToolStripMenuItem cms_item_settings;
     }
 }
 
