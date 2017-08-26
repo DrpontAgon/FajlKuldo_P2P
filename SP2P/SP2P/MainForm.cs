@@ -137,5 +137,13 @@ namespace SP2P
             f.ShowDialog();
             f.Dispose();
         }
+
+        private void cms_Opening(object sender, CancelEventArgs e)
+        {
+            if (lb_files.ClientRectangle.Contains(lb_files.PointToClient(MousePosition)))
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

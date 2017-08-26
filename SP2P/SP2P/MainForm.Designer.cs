@@ -273,7 +273,8 @@
             this.cms_item_ip,
             this.cms_item_settings});
             this.cms.Name = "cms";
-            this.cms.Size = new System.Drawing.Size(168, 48);
+            this.cms.Size = new System.Drawing.Size(168, 70);
+            this.cms.Opening += new System.ComponentModel.CancelEventHandler(this.cms_Opening);
             // 
             // cms_item_ip
             // 
