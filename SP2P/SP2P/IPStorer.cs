@@ -1,6 +1,7 @@
 ﻿// Készítette és a kódot fenttartja: Tóth Ákos
 // Potenciális ötletadók és módosítók: Bense Viktor, Csaholczi Atilla
 
+using System;
 using System.Net;
 using System.IO;
 
@@ -8,7 +9,7 @@ namespace SP2P
 {
     /// <summary>
     /// 
-    /// Az IPLogger célja, hogy elmentse az IP címet akkor, ha az megváltozott.
+    /// Az IPStorer célja, hogy elmentse az IP címet akkor, ha az megváltozott.
     /// Az elmentett IP a fájl elejére kerül így a fájlban mindig a legfrissebbtől
     /// a legrégebbiig van tárolva az IP. Helysprórolásért az elmentett IP binárisan
     /// van elmentve, azaz kódolástól függően a külső szemlélőnek egy cím 2 vagy 4
@@ -17,22 +18,24 @@ namespace SP2P
     /// Általános használata:
     /// 
     /// IPAddress x = bármilyen IP cím;
-    /// x.CheckAndLogIP();
-    /// x.ResetLogToThisIP();
+    /// x.CheckAndStoreIP();
+    /// x.ResetStoreToThisIP();
     /// 
     /// </summary>
-    static class IPLogger
+    static class IPStorer
     {
         /// <summary>
         /// 
         /// Statikus konstruktor, program indításakor fut le és beállítja az alapértelmezett
-        /// helyét (és nevét) a log fájlnak. Az alapértelmezett hely azt a mappát jelenti
+        /// helyét (és nevét) a store fájlnak. Az alapértelmezett hely azt a mappát jelenti
         /// ahol a futtatható állomány is megtalálható.
         /// 
         /// </summary>
-        static IPLogger()
+        static IPStorer()
         {
-            Fpath = "IPLog.ipd";
+            string dir_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SP2P");
+            if (!Directory.Exists(dir_path)) Directory.CreateDirectory(dir_path);
+            Fpath = Path.Combine(dir_path, "IPStore.ips");
         }
 
         public static string Fpath { get; set; }
@@ -44,7 +47,7 @@ namespace SP2P
         /// 
         /// </summary>
         /// <param name="ip"> Megadott IP cím </param>
-        public static void ResetLogToThisIP(this IPAddress ip)
+        public static void ResetStoreToThisIP(this IPAddress ip)
         {
             using (FileStream f = new FileStream(Fpath, FileMode.Create))
             {
@@ -60,13 +63,13 @@ namespace SP2P
         /// 
         /// </summary>
         /// <param name="ip"> Megadott IP cím </param>
-        public static void CheckAndLogIP(this IPAddress ip)
+        public static void CheckAndStoreIP(this IPAddress ip)
         {
             if (File.Exists(Fpath))
             {
-                if (CheckIp(ip)) LogIp(ip);
+                if (CheckIp(ip)) StoreIp(ip);
             }
-            else ResetLogToThisIP(ip);
+            else ResetStoreToThisIP(ip);
         }
 
         /// <summary>
@@ -95,7 +98,7 @@ namespace SP2P
         /// 
         /// </summary>
         /// <param name="ip"> Megadott IP cím </param>
-        private static void LogIp(IPAddress ip)
+        private static void StoreIp(IPAddress ip)
         {
             byte[] arr = File.ReadAllBytes(Fpath);
             using (FileStream f = new FileStream(Fpath, FileMode.Create))

@@ -108,4 +108,12 @@ namespace SP2P
             return ip1.ToUInt32().CompareTo(ip2.ToUInt32());
         }
     }
+
+    public static class UInt32Extensions
+    {
+        public static ushort ChangePortIfInLimits(this ushort input, ushort min, ushort max, ushort previous)
+        {
+            return (input >= min && input <= max) ? input : previous;
+        }
+    }
 }

@@ -49,7 +49,9 @@ namespace SP2P
         /// </summary>
         static IPNameSolver()
         {
-            Fpath = "IPNames.ipn";
+            string dir_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SP2P");
+            if (!Directory.Exists(dir_path)) Directory.CreateDirectory(dir_path);
+            Fpath = Path.Combine(dir_path, "IPNames.ipn");
         }
 
         public static string Fpath { get; set; }

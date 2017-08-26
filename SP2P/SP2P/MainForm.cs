@@ -58,11 +58,6 @@ namespace SP2P
             throw new NotImplementedException();
         }
 
-        private void bt_settings_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void bt_one_info_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Az \"Egy fájl küldése\" gomb: Fájl kiválasztása és annak küldése.", "Információk");
@@ -110,27 +105,27 @@ namespace SP2P
 
         private void tb_ip_1_TextChanged(object sender, EventArgs e)
         {
-            if (tb_ip_1.Text.Length == 3) tb_ip_2.Focus();
+            //if (tb_ip_1.Text.Length == 3) tb_ip_2.Focus();
         }
 
         private void tb_ip_2_TextChanged(object sender, EventArgs e)
         {
-            if (tb_ip_2.Text.Length == 3) tb_ip_3.Focus();
+            //if (tb_ip_2.Text.Length == 3) tb_ip_3.Focus();
         }
 
         private void tb_ip_3_TextChanged(object sender, EventArgs e)
         {
-            if (tb_ip_3.Text.Length == 3) tb_ip_4.Focus();
+            //if (tb_ip_3.Text.Length == 3) tb_ip_4.Focus();
         }
 
         private void tb_ip_4_TextChanged(object sender, EventArgs e)
         {
-            if (tb_ip_4.Text.Length == 3) tb_port.Focus();
+            //if (tb_ip_4.Text.Length == 3) tb_port.Focus();
         }
 
         private void tb_port_TextChanged(object sender, EventArgs e)
         {
-            if (tb_port.Text.Length == 5) bt_connect.Focus();
+            //if (tb_port.Text.Length == 5) bt_connect.Focus();
         }
 
         private void cms_item_ip_Click(object sender, EventArgs e)
@@ -140,7 +135,9 @@ namespace SP2P
 
         private void cms_item_settings_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            SettingsForm f = new SettingsForm();
+            f.ShowDialog();
+            f.Dispose();
         }
     }
 }

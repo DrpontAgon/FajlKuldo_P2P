@@ -45,13 +45,17 @@ namespace SP2P
             var cts = new CancellationTokenSource(20000);
             return await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
         }
-        public static async Task OpenPort(NatDevice device, int port = 55585)
+
+        public static async Task OpenPort(NatDevice device)
         {
+            int port = Settings.Port;
             await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 3600000, "SP2P"));
             MessageBox.Show("A port megnyitva!", "Portnyitás");
         }
-        public static async Task ClosePort(NatDevice device, int port = 55585)
+
+        public static async Task ClosePort(NatDevice device)
         {
+            int port = Settings.Port;
             await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 3600000, "SP2P"));
             MessageBox.Show("A port bezárva!", "Portzárás");
         }
