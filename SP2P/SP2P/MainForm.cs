@@ -41,7 +41,6 @@ namespace SP2P
             lb_lan_inf.BackColor = lb_lan.BackColor = IPChangeChecker.PrivateIpIsLoopback ? Color.Red : Color.LimeGreen;
             lb_wan.Text = IPChangeChecker.PublicIP.ToString();
             lb_lan.Text = IPChangeChecker.PrivateIP.ToString();
-            bt_connect.Enabled = !IPChangeChecker.PublicIpIsNone && !IPChangeChecker.PrivateIpIsLoopback;
             //e.PublicIP.CheckAndLogIP();
         }
 

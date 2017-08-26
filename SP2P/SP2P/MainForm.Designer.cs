@@ -59,7 +59,6 @@
             // 
             // bt_connect
             // 
-            this.bt_connect.Enabled = false;
             this.bt_connect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.bt_connect.Location = new System.Drawing.Point(42, 82);
             this.bt_connect.Name = "bt_connect";
