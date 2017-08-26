@@ -22,18 +22,19 @@ namespace SP2P
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
         }
+
         //Ha esetleg valamikor később szükség lenne a label-ek frissítésére a main thread-en.
         //Ha nem, akkor törölve lesz, majd ha működik a program.
-        private void Update_WAN_LAN()
-        {
-            lb_wan.Invalidate();
-            lb_wan.Update();
-            lb_wan.Refresh();
-            lb_lan.Invalidate();
-            lb_lan.Update();
-            lb_lan.Refresh();
-            Application.DoEvents();
-        }
+        //private void Update_WAN_LAN()
+        //{
+        //    lb_wan.Invalidate();
+        //    lb_wan.Update();
+        //    lb_wan.Refresh();
+        //    lb_lan.Invalidate();
+        //    lb_lan.Update();
+        //    lb_lan.Refresh();
+        //    Application.DoEvents();
+        //}
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
         {

@@ -50,11 +50,13 @@ namespace SP2P
         {
             NetworkChange.NetworkAddressChanged += AddressChanged;
             NetworkChange.NetworkAvailabilityChanged += AddressChanged;
+            PublicIP = IPAddress.None;
+            PrivateIP = IPAddress.Loopback;
         }
 
-        public static IPAddress PublicIP { get; private set; } = IPAddress.None;
+        public static IPAddress PublicIP { get; private set; }
 
-        public static IPAddress PrivateIP { get; private set; } = IPAddress.Loopback;
+        public static IPAddress PrivateIP { get; private set; }
 
         /// <summary>
         /// 
