@@ -56,27 +56,12 @@ namespace SP2P
             }
         }
 
-        private void bt_one_send_Click(object sender, EventArgs e)
-        {
-            ofd.Multiselect = false;
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                string fpath = ofd.FileName;
-                throw new NotImplementedException();
-            }
-        }
-
-        private void bt_more_send_Click(object sender, EventArgs e)
+        private void bt_send_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void bt_one_info_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Az \"Egy fájl küldése\" gomb: Fájl kiválasztása és annak küldése.", "Információk");
-        }
-
-        private void bt_more_info_Click(object sender, EventArgs e)
+        private void bt_send_info_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Lista:\n\tBal egérgomb: Kijelölés." +
                                   "\n\tBal egérgomb + Ctrl: Több kijelölés." +

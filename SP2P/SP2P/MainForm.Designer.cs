@@ -44,11 +44,9 @@
             this.lb_lan_inf = new System.Windows.Forms.Label();
             this.lb_lan = new System.Windows.Forms.Label();
             this.panel = new System.Windows.Forms.Panel();
-            this.bt_more_info = new System.Windows.Forms.Button();
-            this.bt_one_info = new System.Windows.Forms.Button();
+            this.bt_send_info = new System.Windows.Forms.Button();
             this.lb_files = new System.Windows.Forms.ListBox();
-            this.bt_more_send = new System.Windows.Forms.Button();
-            this.bt_one_send = new System.Windows.Forms.Button();
+            this.bt_send = new System.Windows.Forms.Button();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cms_item_ip = new System.Windows.Forms.ToolStripMenuItem();
@@ -220,11 +218,9 @@
             // 
             // panel
             // 
-            this.panel.Controls.Add(this.bt_more_info);
-            this.panel.Controls.Add(this.bt_one_info);
+            this.panel.Controls.Add(this.bt_send_info);
             this.panel.Controls.Add(this.lb_files);
-            this.panel.Controls.Add(this.bt_more_send);
-            this.panel.Controls.Add(this.bt_one_send);
+            this.panel.Controls.Add(this.bt_send);
             this.panel.Enabled = false;
             this.panel.Location = new System.Drawing.Point(0, 121);
             this.panel.Margin = new System.Windows.Forms.Padding(0);
@@ -232,62 +228,40 @@
             this.panel.Size = new System.Drawing.Size(226, 293);
             this.panel.TabIndex = 16;
             // 
-            // bt_more_info
+            // bt_send_info
             // 
-            this.bt_more_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.bt_more_info.Location = new System.Drawing.Point(185, 47);
-            this.bt_more_info.Name = "bt_more_info";
-            this.bt_more_info.Size = new System.Drawing.Size(30, 30);
-            this.bt_more_info.TabIndex = 10;
-            this.bt_more_info.Text = "?";
-            this.bt_more_info.UseVisualStyleBackColor = true;
-            this.bt_more_info.Click += new System.EventHandler(this.bt_more_info_Click);
-            // 
-            // bt_one_info
-            // 
-            this.bt_one_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.bt_one_info.Location = new System.Drawing.Point(185, 5);
-            this.bt_one_info.Name = "bt_one_info";
-            this.bt_one_info.Size = new System.Drawing.Size(30, 30);
-            this.bt_one_info.TabIndex = 8;
-            this.bt_one_info.Text = "?";
-            this.bt_one_info.UseVisualStyleBackColor = true;
-            this.bt_one_info.Click += new System.EventHandler(this.bt_one_info_Click);
+            this.bt_send_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_send_info.Location = new System.Drawing.Point(185, 5);
+            this.bt_send_info.Name = "bt_send_info";
+            this.bt_send_info.Size = new System.Drawing.Size(30, 30);
+            this.bt_send_info.TabIndex = 10;
+            this.bt_send_info.Text = "?";
+            this.bt_send_info.UseVisualStyleBackColor = true;
+            this.bt_send_info.Click += new System.EventHandler(this.bt_send_info_Click);
             // 
             // lb_files
             // 
             this.lb_files.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.lb_files.FormattingEnabled = true;
             this.lb_files.ItemHeight = 20;
-            this.lb_files.Location = new System.Drawing.Point(12, 86);
+            this.lb_files.Location = new System.Drawing.Point(12, 46);
             this.lb_files.Name = "lb_files";
             this.lb_files.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lb_files.Size = new System.Drawing.Size(201, 204);
+            this.lb_files.Size = new System.Drawing.Size(201, 244);
             this.lb_files.TabIndex = 11;
             this.lb_files.DoubleClick += new System.EventHandler(this.lb_files_DoubleClick);
             this.lb_files.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lb_files_MouseDown);
             // 
-            // bt_more_send
+            // bt_send
             // 
-            this.bt_more_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.bt_more_send.Location = new System.Drawing.Point(42, 44);
-            this.bt_more_send.Name = "bt_more_send";
-            this.bt_more_send.Size = new System.Drawing.Size(141, 36);
-            this.bt_more_send.TabIndex = 9;
-            this.bt_more_send.Text = "Több fájl küldése";
-            this.bt_more_send.UseVisualStyleBackColor = true;
-            this.bt_more_send.Click += new System.EventHandler(this.bt_more_send_Click);
-            // 
-            // bt_one_send
-            // 
-            this.bt_one_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.bt_one_send.Location = new System.Drawing.Point(42, 2);
-            this.bt_one_send.Name = "bt_one_send";
-            this.bt_one_send.Size = new System.Drawing.Size(141, 36);
-            this.bt_one_send.TabIndex = 7;
-            this.bt_one_send.Text = "Egy fájl küldése";
-            this.bt_one_send.UseVisualStyleBackColor = true;
-            this.bt_one_send.Click += new System.EventHandler(this.bt_one_send_Click);
+            this.bt_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.bt_send.Location = new System.Drawing.Point(42, 2);
+            this.bt_send.Name = "bt_send";
+            this.bt_send.Size = new System.Drawing.Size(141, 36);
+            this.bt_send.TabIndex = 9;
+            this.bt_send.Text = "Fájl küldése";
+            this.bt_send.UseVisualStyleBackColor = true;
+            this.bt_send.Click += new System.EventHandler(this.bt_send_Click);
             // 
             // ofd
             // 
@@ -365,11 +339,9 @@
         private System.Windows.Forms.Label lb_lan_inf;
         private System.Windows.Forms.Label lb_lan;
         private System.Windows.Forms.Panel panel;
-        private System.Windows.Forms.Button bt_more_info;
-        private System.Windows.Forms.Button bt_one_info;
+        private System.Windows.Forms.Button bt_send_info;
         private System.Windows.Forms.ListBox lb_files;
-        private System.Windows.Forms.Button bt_more_send;
-        private System.Windows.Forms.Button bt_one_send;
+        private System.Windows.Forms.Button bt_send;
         private System.Windows.Forms.OpenFileDialog ofd;
         private System.Windows.Forms.ContextMenuStrip cms;
         private System.Windows.Forms.ToolStripMenuItem cms_item_ip;
