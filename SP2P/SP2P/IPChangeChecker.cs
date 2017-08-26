@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace SP2P
 {
@@ -51,9 +52,9 @@ namespace SP2P
             NetworkChange.NetworkAvailabilityChanged += AddressChanged;
         }
 
-        public static IPAddress PublicIP { get; private set; }
+        public static IPAddress PublicIP { get; private set; } = IPAddress.None;
 
-        public static IPAddress PrivateIP { get; private set; }
+        public static IPAddress PrivateIP { get; private set; } = IPAddress.Loopback;
 
         /// <summary>
         /// 
@@ -131,11 +132,11 @@ namespace SP2P
         /// 
         /// </summary>
         /// <returns> WAN IP cím, sikertelen lekéréskor a None cím </returns>
-        private static IPAddress GetPublicIPv4()
+        private async static Task<IPAddress> GetPublicIPv4()
         {
             try
             {
-                string s = new WebDownload(5000).DownloadString("http://icanhazip.com");
+                string s = await new WebDownload(5000).DownloadStringTaskAsync("http://icanhazip.com");
                 return IPAddress.Parse(s.Remove(s.Length - 1));
             }
             catch
@@ -152,10 +153,9 @@ namespace SP2P
         /// </summary>
         /// <param name="sender"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
         /// <param name="e"> NetworkChange eventjeihez tartozó nemhasznált paraméter </param>
-        private static void AddressChanged(object sender, EventArgs e)
+        private async static void AddressChanged(object sender, EventArgs e)
         {
-            PublicIP = GetPublicIPv4();
-            PrivateIP = GetLocalIPv4();
+            await Task.Run(async () => { PublicIP = await GetPublicIPv4(); PrivateIP = GetLocalIPv4(); });
             RaiseNetChanged(new IPChangedEventArgs(PublicIP, PrivateIP, PublicIpIsNone, PrivateIpIsLoopback));
         }
     }
