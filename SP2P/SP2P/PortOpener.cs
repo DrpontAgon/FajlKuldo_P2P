@@ -39,24 +39,24 @@ namespace SP2P
 {
     class PortOpener
     {
-        public static async Task<NatDevice> GetConnectedDevice()
-        {
-            var discoverer = new NatDiscoverer();
-            var cts = new CancellationTokenSource(20000);
-            return await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
-        }
 
-        public static async Task OpenPort(NatDevice device)
+        public static async Task OpenPort()
         {
             int port = Settings.Port;
-            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 3600000, "SP2P"));
+            var discoverer = new NatDiscoverer();
+            var cts = new CancellationTokenSource(20000);
+            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 1800000, "SP2P"));
             MessageBox.Show("A port megnyitva!", "Portnyitás");
         }
 
-        public static async Task ClosePort(NatDevice device)
+        public static async Task ClosePort()
         {
             int port = Settings.Port;
-            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 3600000, "SP2P"));
+            var discoverer = new NatDiscoverer();
+            var cts = new CancellationTokenSource(20000);
+            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+            await device.DeletePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 0, "SP2P"));
             MessageBox.Show("A port bezárva!", "Portzárás");
         }
     }
