@@ -5,7 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Net.Sockets;
+//using System.Text;
 using System.Threading.Tasks;
 
 namespace SP2P
@@ -34,6 +35,14 @@ namespace SP2P
         }
     }
 
+    public static class UInt32Extensions
+    {
+        public static ushort ChangePortIfInLimits(this ushort input, ushort min, ushort max, ushort previous)
+        {
+            return (input >= min && input <= max) ? input : previous;
+        }
+    }
+
     /// <summary>
     /// 
     /// Egyéb IPAddress-t kiegészítő osztály, célja tárolni az összes többi szükséges függvényt
@@ -47,7 +56,7 @@ namespace SP2P
     /// var0 = x.KiegeszitoMetodus(param1, param2, ..., paramn);
     /// 
     /// </summary>
-    public static class IPAddressExtender
+    public static class IPAddressExtensions
     {
         /// <summary>
         /// 
@@ -109,11 +118,58 @@ namespace SP2P
         }
     }
 
-    public static class UInt32Extensions
+    static class SocketExtensions
     {
-        public static ushort ChangePortIfInLimits(this ushort input, ushort min, ushort max, ushort previous)
+        public static IAsyncResult BeginSend(this Socket socket, byte[] buffer, AsyncCallback callback, object state)
         {
-            return (input >= min && input <= max) ? input : previous;
+            return socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, callback, state);
+        }
+        public static IAsyncResult BeginReceive(this Socket socket, byte[] buffer, AsyncCallback callback, object state)
+        {
+            return socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, callback, state);
+        }
+
+        public static Task<Socket> AcceptAsyncTAP(this Socket socket)
+        {
+            return Task<Socket>.Factory.FromAsync(socket.BeginAccept, socket.EndAccept, null);
+        }
+
+        public static Task ConnectAsyncTAP(this Socket socket, EndPoint endpoint)
+        {
+            return Task.Factory.FromAsync(socket.BeginConnect, socket.EndConnect, endpoint, null);
+        }
+
+        public static Task ConnectAsyncTAP(this Socket socket, IPAddress address, int port)
+        {
+            return socket.ConnectAsyncTAP(new IPEndPoint(address, port));
+        }
+
+        //public static Task DisconnectAsyncTAP(this Socket socket, bool reuseSocket)
+        //{
+        //    return Task.Factory.FromAsync(socket.BeginDisconnect, socket.EndDisconnect, reuseSocket, null);
+        //}
+
+        public static Task<int> SendAsyncTAP(this Socket socket, byte[] buffer)
+        {
+            //return Task<int>.Factory.FromAsync(socket.BeginSend, socket.EndSend, buffer, 0, buffer.Length, SocketFlags.None, null);
+
+            //return Task<int>.Factory.FromAsync(
+            //    (callback, state) => socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, callback, state), socket.EndSend, null);
+
+            return Task<int>.Factory.FromAsync(socket.BeginSend, socket.EndSend, buffer, null);
+        }
+        public static Task<int> ReceiveAsyncTAP(this Socket socket, byte[] buffer)
+        {
+            //return Task<int>.Factory.FromAsync(socket.BeginReceive, socket.EndReceive, buffer, 0, buffer.Length, SocketFlags.None, null);
+
+            //return Task<int>.Factory.FromAsync(
+            //     (callback, state) => socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, callback, state), socket.EndReceive, null);
+
+            return Task<int>.Factory.FromAsync(socket.BeginReceive, socket.EndReceive, buffer, null);
+        }
+        public static Task SendFileAsyncTAP(this Socket socket, string fileName)
+        {
+            return Task.Factory.FromAsync(socket.BeginSendFile, socket.EndSendFile, fileName, null);
         }
     }
 }
