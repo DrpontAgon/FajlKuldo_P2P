@@ -33,17 +33,19 @@
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 using Open.Nat;
 
 namespace SP2P
 {
     class PortOpener
     {
-        public static async Task<bool> OpenPort(bool silent = true)
+        public static async Task<bool> OpenPort(int? nullable_port = null, bool silent = true)
         {
             try
             {
-                int port = Settings.Port;
+                int port = nullable_port.HasValue ? nullable_port.Value : Settings.Port;
                 var discoverer = new NatDiscoverer();
                 var cts = new CancellationTokenSource(20000);
                 var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
@@ -60,11 +62,11 @@ namespace SP2P
             }
         }
 
-        public static async Task<bool> ClosePort(bool silent = true)
+        public static async Task<bool> ClosePort(int? nullable_port = null, bool silent = true)
         {
             try
             {
-                int port = Settings.Port;
+                int port = nullable_port.HasValue ? nullable_port.Value : Settings.Port;
                 var discoverer = new NatDiscoverer();
                 var cts = new CancellationTokenSource(20000);
                 var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
@@ -79,7 +81,87 @@ namespace SP2P
             {
                 return false;
             }
-            
+        }
+        public static async Task<bool> ClosePort(Mapping mapping, bool silent = true)
+        {
+            try
+            {
+                var discoverer = new NatDiscoverer();
+                var cts = new CancellationTokenSource(20000);
+                var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                await device.DeletePortMapAsync(mapping);
+                if (!silent)
+                {
+                    MessageBox.Show("A port bezárva!", "Portzárás");
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> IsPortOpen(int? nullable_port = null, bool silent = true)
+        {
+            try
+            {
+                int port = nullable_port.HasValue ? nullable_port.Value : Settings.Port;
+                var discoverer = new NatDiscoverer();
+                var cts = new CancellationTokenSource(20000);
+                var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                foreach (var item in await device.GetAllMappingsAsync())
+                {
+                    if (item.Description == "SP2P" && (item.PrivatePort == port || item.PublicPort == port))
+                    {
+                        if (!silent)
+                        {
+                            MessageBox.Show($"Meg van nyitva ez a port: {port}!");
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> CloseAllPortsExcept(params int[] ports)
+        {
+            try
+            {
+                bool ret = true;
+                var discoverer = new NatDiscoverer();
+                var cts = new CancellationTokenSource(20000);
+                var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                foreach (var item in await device.GetAllMappingsAsync())
+                {
+                    if (item.Description == "SP2P")
+                    {
+                        bool is_exception = false;
+                        for (int i = 0; i < ports.Length; i++)
+                        {
+                            if (item.PrivatePort == ports[i] || item.PublicPort == ports[i])
+                            {
+                                is_exception = true;
+                                break;
+                            }
+                        }
+                        if (!is_exception)
+                        {
+                            ret &= await ClosePort(item);
+                        }
+                    }
+                }
+                return ret;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

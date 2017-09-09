@@ -22,8 +22,19 @@ namespace SP2P
         public MainForm()
         {
             InitializeComponent();
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
+            if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
+            {
+                MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
+            }
+            port_open = await PortOpener.IsPortOpen();
+            bt_port_openclose.Text = port_open ? "Port zárása" : "Port nyitása";
+            bt_port_openclose.Enabled = true;
         }
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
@@ -44,7 +55,7 @@ namespace SP2P
                 if (await PortOpener.ClosePort())
                 {
                     bt_port_openclose.Text = "Port nyitása";
-                    port_open = !port_open;
+                    port_open = false;
                 }
                 else
                 {
@@ -57,7 +68,7 @@ namespace SP2P
                 if (await PortOpener.OpenPort())
                 {
                     bt_port_openclose.Text = "Port zárása";
-                    port_open = !port_open;
+                    port_open = true;
                 }
                 else
                 {
@@ -67,20 +78,79 @@ namespace SP2P
             }
         }
 
-        private void bt_listen_Click(object sender, EventArgs e)
+        private async void bt_listen_Click(object sender, EventArgs e)
         {
-
+            if (listening)
+            {
+                bt_listen.Text = "Kapcsolatra várás";
+                bt_connect.Enabled = true;
+                panel.Enabled = false;
+                listening = false;
+                sc.Close();
+            }
+            else
+            {
+                bt_listen.Text = "Várás befejezése";
+                bt_connect.Enabled = false;
+                listening = true;
+                sc = new SimpleConnection(true);
+                if (await sc.AcceptAsync(1000, false))
+                {
+                    panel.Enabled = true;
+                }
+                else
+                {
+                    bt_listen.Text = "Kapcsolatra várás";
+                    bt_connect.Enabled = true;
+                    listening = false;
+                    sc.Close();
+                }
+            }
         }
 
-        private void bt_connect_Click(object sender, EventArgs e)
+        private async void bt_connect_Click(object sender, EventArgs e)
         {
-            //string s_ip = $"{tb_ip_1.Text}.{tb_ip_2.Text}.{tb_ip_3.Text}.{tb_ip_4.Text}";
-            //if (IPAddress.TryParse(s_ip, out IPAddress ip) && ushort.TryParse(tb_port.Text, out ushort port))
-            //{
-            //    connected = !connected;
-            //    bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
-            //    panel.Enabled = connected;
-            //}
+            if (connected)
+            {
+                bt_connect.Text = "Csatlakozás";
+                bt_listen.Enabled = true;
+                panel.Enabled = false;
+                connected = false;
+                sc.Close();
+            }
+            else
+            {
+                string s_ip = $"{tb_ip_1.Text}.{tb_ip_2.Text}.{tb_ip_3.Text}.{tb_ip_4.Text}";
+                if (IPAddress.TryParse(s_ip, out IPAddress ip) && ushort.TryParse(tb_port.Text, out ushort port))
+                {
+                    if (port.PortInLimits(50000, 65535))
+                    {
+                        bt_connect.Text = "Lecsatlakozás";
+                        bt_listen.Enabled = false;
+                        connected = true;
+                        sc = new SimpleConnection(false);
+                        if (await sc.ConnectAsync(ip, port, 1000, false))
+                        {
+                            panel.Enabled = true;
+                        }
+                        else
+                        {
+                            bt_connect.Text = "Csatlakozás";
+                            bt_listen.Enabled = true;
+                            connected = false;
+                            sc.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Portszám csak 50000 és 65535 között lehet!");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Hibás IP cím vagy portszám!");
+                }
+            }
         }
 
         private void bt_send_Click(object sender, EventArgs e)

@@ -333,7 +333,7 @@ namespace SP2P
         }
         #endregion
 
-        public void Close()
+        public void Close(bool silent = true)
         {
             try
             {

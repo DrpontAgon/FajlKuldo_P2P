@@ -27,20 +27,36 @@ namespace SP2P
             bool success = false;
             switch (input_t.GetTypeCode())
             {
-                
-                case TypeCode.Int32: success_t = (T)str.GenericTryParse<int>(ref success, int.TryParse); break;
+                case TypeCode.Boolean: success_t = (T)str.GenericTryParse<bool>(ref success, bool.TryParse); break;
+                case TypeCode.Byte: success_t = (T)str.GenericTryParse<byte>(ref success, byte.TryParse); break;
+                case TypeCode.SByte: success_t = (T)str.GenericTryParse<sbyte>(ref success, sbyte.TryParse); break;
                 case TypeCode.UInt16: success_t = (T)str.GenericTryParse<ushort>(ref success, ushort.TryParse); break;
+                case TypeCode.Int16: success_t = (T)str.GenericTryParse<short>(ref success, short.TryParse); break;
+                case TypeCode.UInt32: success_t = (T)str.GenericTryParse<uint>(ref success, uint.TryParse); break;
+                case TypeCode.Int32: success_t = (T)str.GenericTryParse<int>(ref success, int.TryParse); break;
+                case TypeCode.UInt64: success_t = (T)str.GenericTryParse<ulong>(ref success, ulong.TryParse); break;
+                case TypeCode.Int64: success_t = (T)str.GenericTryParse<long>(ref success, long.TryParse); break;
+                case TypeCode.Single: success_t = (T)str.GenericTryParse<float>(ref success, float.TryParse); break;
+                case TypeCode.Double: success_t = (T)str.GenericTryParse<double>(ref success, double.TryParse); break;
+                case TypeCode.Decimal: success_t = (T)str.GenericTryParse<decimal>(ref success, decimal.TryParse); break;
+                case TypeCode.Char: success_t = (T)str.GenericTryParse<char>(ref success, char.TryParse); break;
+                case TypeCode.DateTime: success_t = (T)str.GenericTryParse<DateTime>(ref success, DateTime.TryParse); break;
                 default: break;
             }
             return success ? success_t : input_t;
         }
     }
 
-    public static class UInt32Extensions
+    public static class UInt16Extensions
     {
+        public static bool PortInLimits(this ushort input, ushort min, ushort max)
+        {
+            return (input >= min && input <= max);
+        }
+
         public static ushort ChangePortIfInLimits(this ushort input, ushort min, ushort max, ushort previous)
         {
-            return (input >= min && input <= max) ? input : previous;
+            return PortInLimits(input, min, max) ? input : previous;
         }
     }
 

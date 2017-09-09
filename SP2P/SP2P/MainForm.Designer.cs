@@ -306,12 +306,13 @@
             // 
             // bt_port_openclose
             // 
+            this.bt_port_openclose.Enabled = false;
             this.bt_port_openclose.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.bt_port_openclose.Location = new System.Drawing.Point(42, 41);
             this.bt_port_openclose.Name = "bt_port_openclose";
             this.bt_port_openclose.Size = new System.Drawing.Size(141, 30);
             this.bt_port_openclose.TabIndex = 17;
-            this.bt_port_openclose.Text = "Port nyitása";
+            this.bt_port_openclose.Text = "Port";
             this.bt_port_openclose.UseVisualStyleBackColor = true;
             this.bt_port_openclose.Click += new System.EventHandler(this.bt_port_openclose_Click);
             // 
@@ -343,6 +344,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SP2P";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.panel.ResumeLayout(false);
             this.cms.ResumeLayout(false);
             this.ResumeLayout(false);
