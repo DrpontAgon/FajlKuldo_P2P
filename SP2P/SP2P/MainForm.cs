@@ -13,8 +13,11 @@ namespace SP2P
 {
     public partial class MainForm : Form
     {
+        bool listening = false;
         bool connected = false;
+        bool port_open = false;
         List<string> file_paths = new List<string>();
+        SimpleConnection sc;
 
         public MainForm()
         {
@@ -22,19 +25,6 @@ namespace SP2P
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
         }
-
-        //Ha esetleg valamikor később szükség lenne a label-ek frissítésére a main thread-en.
-        //Ha nem, akkor törölve lesz, majd ha működik a program.
-        //private void Update_WAN_LAN()
-        //{
-        //    lb_wan.Invalidate();
-        //    lb_wan.Update();
-        //    lb_wan.Refresh();
-        //    lb_lan.Invalidate();
-        //    lb_lan.Update();
-        //    lb_lan.Refresh();
-        //    Application.DoEvents();
-        //}
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
         {
@@ -45,15 +35,52 @@ namespace SP2P
             //e.PublicIP.CheckAndLogIP();
         }
 
+        private async void bt_port_openclose_Click(object sender, EventArgs e)
+        {
+            bt_port_openclose.Text = "folyamatban...";
+            bt_port_openclose.Enabled = false;
+            if (port_open)
+            {
+                if (await PortOpener.ClosePort())
+                {
+                    bt_port_openclose.Text = "Port nyitása";
+                    port_open = !port_open;
+                }
+                else
+                {
+                    bt_port_openclose.Text = "Port zárása";
+                }
+                bt_port_openclose.Enabled = true;
+            }
+            else
+            {
+                if (await PortOpener.OpenPort())
+                {
+                    bt_port_openclose.Text = "Port zárása";
+                    port_open = !port_open;
+                }
+                else
+                {
+                    bt_port_openclose.Text = "Port nyitása";
+                }
+                bt_port_openclose.Enabled = true;
+            }
+        }
+
+        private void bt_listen_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void bt_connect_Click(object sender, EventArgs e)
         {
-            string s_ip = $"{tb_ip_1.Text}.{tb_ip_2.Text}.{tb_ip_3.Text}.{tb_ip_4.Text}";
-            if (IPAddress.TryParse(s_ip, out IPAddress ip) && ushort.TryParse(tb_port.Text, out ushort port))
-            {
-                connected = !connected;
-                bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
-                panel.Enabled = connected;
-            }
+            //string s_ip = $"{tb_ip_1.Text}.{tb_ip_2.Text}.{tb_ip_3.Text}.{tb_ip_4.Text}";
+            //if (IPAddress.TryParse(s_ip, out IPAddress ip) && ushort.TryParse(tb_port.Text, out ushort port))
+            //{
+            //    connected = !connected;
+            //    bt_connect.Text = connected ? "Szétválasztás" : "Csatlakozás";
+            //    panel.Enabled = connected;
+            //}
         }
 
         private void bt_send_Click(object sender, EventArgs e)

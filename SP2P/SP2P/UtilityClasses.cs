@@ -27,6 +27,7 @@ namespace SP2P
             bool success = false;
             switch (input_t.GetTypeCode())
             {
+                
                 case TypeCode.Int32: success_t = (T)str.GenericTryParse<int>(ref success, int.TryParse); break;
                 case TypeCode.UInt16: success_t = (T)str.GenericTryParse<ushort>(ref success, ushort.TryParse); break;
                 default: break;

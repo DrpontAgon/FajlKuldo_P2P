@@ -39,25 +39,47 @@ namespace SP2P
 {
     class PortOpener
     {
-
-        public static async Task OpenPort()
+        public static async Task<bool> OpenPort(bool silent = true)
         {
-            int port = Settings.Port;
-            var discoverer = new NatDiscoverer();
-            var cts = new CancellationTokenSource(20000);
-            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
-            await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 1800000, "SP2P"));
-            MessageBox.Show("A port megnyitva!", "Portnyitás");
+            try
+            {
+                int port = Settings.Port;
+                var discoverer = new NatDiscoverer();
+                var cts = new CancellationTokenSource(20000);
+                var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                await device.CreatePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 0, "SP2P"));
+                if (!silent)
+                {
+                    MessageBox.Show("A port megnyitva!", "Portnyitás");
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public static async Task ClosePort()
+        public static async Task<bool> ClosePort(bool silent = true)
         {
-            int port = Settings.Port;
-            var discoverer = new NatDiscoverer();
-            var cts = new CancellationTokenSource(20000);
-            var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
-            await device.DeletePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 0, "SP2P"));
-            MessageBox.Show("A port bezárva!", "Portzárás");
+            try
+            {
+                int port = Settings.Port;
+                var discoverer = new NatDiscoverer();
+                var cts = new CancellationTokenSource(20000);
+                var device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                await device.DeletePortMapAsync(new Mapping(Protocol.Tcp, IPChangeChecker.PrivateIP, port, port, 0, "SP2P"));
+                if (!silent)
+                {
+                    MessageBox.Show("A port bezárva!", "Portzárás"); 
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
     }
 }
