@@ -346,11 +346,17 @@ namespace SP2P
                 {
                     ServerSocket.Close();
                 }
-                MessageBox.Show("Sikeres szétkapcsolás.");
+                if (!silent)
+                {
+                    MessageBox.Show("Sikeres szétkapcsolás.");
+                }
             }
             catch (SocketException e)
             {
-                MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                if (!silent)
+                {
+                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                }
             }
             catch (ObjectDisposedException) { /*nothing*/ }
         }

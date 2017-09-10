@@ -28,6 +28,7 @@ namespace SP2P
         {
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
+            await PortOpener.WaitForDevice();
             if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
             {
                 MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
@@ -94,7 +95,7 @@ namespace SP2P
                 bt_connect.Enabled = false;
                 listening = true;
                 sc = new SimpleConnection(true);
-                if (await sc.AcceptAsync(1000, false))
+                if (await sc.AcceptAsync())
                 {
                     panel.Enabled = true;
                 }
@@ -129,7 +130,7 @@ namespace SP2P
                         bt_listen.Enabled = false;
                         connected = true;
                         sc = new SimpleConnection(false);
-                        if (await sc.ConnectAsync(ip, port, 1000, false))
+                        if (await sc.ConnectAsync(ip, port))
                         {
                             panel.Enabled = true;
                         }

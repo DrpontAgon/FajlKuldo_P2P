@@ -47,13 +47,16 @@ namespace SP2P
             NatDiscoverer discoverer = new NatDiscoverer();
             CancellationTokenSource cts = new CancellationTokenSource(20000);
             BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += async(object sender, DoWorkEventArgs e) => { Device = await GetDevice(discoverer, cts); };
+            worker.DoWork += async(object sender, DoWorkEventArgs e) => { Device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts); };
             worker.RunWorkerAsync();
         }
 
-        private static async Task<NatDevice> GetDevice(NatDiscoverer discoverer, CancellationTokenSource cts)
+        public static async Task WaitForDevice()
         {
-            return await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+            while (Device == null)
+            {
+                await Task.Delay(1000);
+            }
         }
 
         public static NatDevice Device { get; private set; } = null;
