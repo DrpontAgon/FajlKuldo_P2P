@@ -36,6 +36,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using Open.Nat;
+using System.ComponentModel;
 
 namespace SP2P
 {
@@ -45,12 +46,14 @@ namespace SP2P
         {
             NatDiscoverer discoverer = new NatDiscoverer();
             CancellationTokenSource cts = new CancellationTokenSource(20000);
-            GetDevice(discoverer, cts);
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += async(object sender, DoWorkEventArgs e) => { Device = await GetDevice(discoverer, cts); };
+            worker.RunWorkerAsync();
         }
 
-        private static async void GetDevice(NatDiscoverer discoverer, CancellationTokenSource cts)
+        private static async Task<NatDevice> GetDevice(NatDiscoverer discoverer, CancellationTokenSource cts)
         {
-            Device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+            return await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
         }
 
         public static NatDevice Device { get; private set; } = null;
