@@ -42,24 +42,38 @@ namespace SP2P
 {
     class PortOpener
     {
-        static PortOpener()
-        {
-            NatDiscoverer discoverer = new NatDiscoverer();
-            CancellationTokenSource cts = new CancellationTokenSource(20000);
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += async(object sender, DoWorkEventArgs e) => { Device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts); };
-            worker.RunWorkerAsync();
-        }
+        //static PortOpener()
+        //{
+        //    BackgroundWorker worker = new BackgroundWorker();
+        //    worker.DoWork += async (object sender, DoWorkEventArgs e) => { await GetDevice(); };
+        //}
 
-        public static async Task WaitForDevice()
+        public static async Task<bool> GetDevice()
         {
-            while (Device == null)
+            try
             {
-                await Task.Delay(1000);
+                NatDiscoverer discoverer = new NatDiscoverer();
+                CancellationTokenSource cts = new CancellationTokenSource(20000);
+                Device = await discoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts);
+                return true;
+            }
+            catch
+            {
+                return false;
             }
         }
 
+        //public static async Task WaitForDevice()
+        //{
+        //    while (DeviceExist == null)
+        //    {
+        //        await Task.Delay(1000);
+        //    }
+        //}
+
         public static NatDevice Device { get; private set; } = null;
+
+        //public static bool? DeviceExist { get; private set; } = null;
 
         public static async Task<bool> OpenPort(int? nullable_port = null, bool silent = true)
         {

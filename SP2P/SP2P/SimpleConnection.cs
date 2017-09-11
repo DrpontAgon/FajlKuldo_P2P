@@ -9,6 +9,7 @@ namespace SP2P
     enum Message : byte
     {
         OK = 1,
+        INVALID = 2,
         CONNECT_REQUEST = 11,
         DISCONNECT_REQUEST = 12,
         FILE_TRANSFER_REQUEST = 13,
@@ -340,6 +341,35 @@ namespace SP2P
                 return false;
             }
             catch (ObjectDisposedException) { return false; /*nothing*/ }
+        }
+
+        public async Task<byte[]> GetBytesAmount(int db)
+        {
+            byte[] ret = new byte[db];
+            byte[] buffer = new byte[db];
+            int arrived = 0;
+            //int needed = db;
+            int arrived_sum = 0;
+            //buffer.CopyTo()
+            do
+            {
+                arrived += await ClientSocket.ReceiveAsyncTAP(buffer);
+                if (arrived_sum + arrived <= db)
+                {
+                    buffer.CopyTo(ret, arrived_sum);
+                    arrived_sum += arrived;
+                }
+                else
+                {
+                    int needed = db - arrived_sum;
+                    for (int i = 0; i < needed; i++)
+                    {
+                        ret[i + arrived_sum] = buffer[i];
+                    }
+                    arrived_sum = db;
+                }
+            } while (arrived_sum < db);
+            return ret;
         }
         #endregion
 

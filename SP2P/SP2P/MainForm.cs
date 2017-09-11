@@ -28,14 +28,20 @@ namespace SP2P
         {
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
-            await PortOpener.WaitForDevice();
-            if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
+            if (await PortOpener.GetDevice())
             {
-                MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
+                if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
+                {
+                    MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
+                }
+                port_open = await PortOpener.IsPortOpen();
+                bt_port_openclose.Text = port_open ? "Port zárása" : "Port nyitása";
+                bt_port_openclose.Enabled = true; 
             }
-            port_open = await PortOpener.IsPortOpen();
-            bt_port_openclose.Text = port_open ? "Port zárása" : "Port nyitása";
-            bt_port_openclose.Enabled = true;
+            else
+            {
+                MessageBox.Show("Port műveletek nem lehetségesek a programon belül!");
+            }
         }
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
@@ -97,7 +103,26 @@ namespace SP2P
                 sc = new SimpleConnection(true);
                 if (await sc.AcceptAsync())
                 {
-                    panel.Enabled = true;
+                    //byte[] arrived = await sc.GetBytesAmount(1);
+                    //if (arrived[0] == (byte)Message.CONNECT_REQUEST)
+                    //{
+                    //    arrived = await sc.GetBytesAmount(1);
+                    //    int db = arrived[0];
+                    //    arrived = await sc.GetBytesAmount(db * 4);
+                    //    IPShowForm f = new IPShowForm(arr, db);
+                    //    f.ShowDialog();
+                    //    if (f.jo)
+                    //    {
+                    //        arrived = await sc.GetBytesAmount(1);
+                    //        switch (arrived[0])
+                    //        {
+                    //            case (byte)Message.FILE_TRANSFER_REQUEST: FileTransferOperation();
+                    //            case (byte)Message.FILE_TRANSFER_REQUEST: DisconnectOperation();
+                    //            default: sc.SendBytes((byte[])Message.INVALID); break;
+                    //        }
+                    //    }
+                    //}
+                    //panel.Enabled = true;
                 }
                 else
                 {
