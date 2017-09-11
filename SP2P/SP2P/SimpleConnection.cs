@@ -6,6 +6,16 @@ using System.Windows.Forms;
 
 namespace SP2P
 {
+    enum Message : byte
+    {
+        OK = 1,
+        CONNECT_REQUEST = 11,
+        DISCONNECT_REQUEST = 12,
+        FILE_TRANSFER_REQUEST = 13,
+        ANSWER_YES = 21,
+        ANSWER_NO = 22
+    };
+
     class SimpleConnection
     {
         public Socket ServerSocket { get; private set; } = null;
