@@ -99,37 +99,121 @@ namespace SP2P
             {
                 bt_listen.Text = "Várás befejezése";
                 bt_connect.Enabled = false;
-                listening = true;
-                sc = new SimpleConnection(true);
-                if (await sc.AcceptAsync())
+                while (listening)
                 {
-                    //byte[] arrived = await sc.GetBytesAmount(1);
-                    //if (arrived[0] == (byte)Message.CONNECT_REQUEST)
-                    //{
-                    //    arrived = await sc.GetBytesAmount(1);
-                    //    int db = arrived[0];
-                    //    arrived = await sc.GetBytesAmount(db * 4);
-                    //    IPShowForm f = new IPShowForm(arr, db);
-                    //    f.ShowDialog();
-                    //    if (f.jo)
-                    //    {
-                    //        arrived = await sc.GetBytesAmount(1);
-                    //        switch (arrived[0])
-                    //        {
-                    //            case (byte)Message.FILE_TRANSFER_REQUEST: FileTransferOperation();
-                    //            case (byte)Message.FILE_TRANSFER_REQUEST: DisconnectOperation();
-                    //            default: sc.SendBytes((byte[])Message.INVALID); break;
-                    //        }
-                    //    }
-                    //}
-                    //panel.Enabled = true;
-                }
-                else
-                {
-                    bt_listen.Text = "Kapcsolatra várás";
-                    bt_connect.Enabled = true;
-                    listening = false;
-                    sc.Close();
+                    listening = true;
+                    sc = new SimpleConnection(true);
+                    if (await sc.AcceptAsync())
+                    {
+                        byte[] receive_bytes = new byte[1024];
+                        byte[] send_bytes = new byte[1];
+                        int received;
+                        bool valid_response = false;
+
+                        //received = await sc.ReceiveBytesAsync(receive_bytes);
+                        //if (received == 1 && receive_bytes[0] == (byte)Message.CONNECT_REQUEST)
+                        //{
+                        //    send_bytes[0] = (byte)Message.OK;
+                        //    await sc.SendBytesAsync(send_bytes);
+                        //}
+                        //else
+                        //{
+                        //    invalid_response = true;
+                        //}
+
+                        valid_response = await sc.MessageCommunicationAsync(Message.OK, Message.CONNECT_REQUEST, false);
+
+                        int n = 0;
+
+                        if (valid_response)
+                        {
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
+                            if (received == 1)
+                            {
+                                n = receive_bytes[0] * 4;
+                                valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
+                            }
+                            else
+                            {
+                                valid_response = false;
+                            }
+                        }
+
+                        if (n > 1024)
+                        {
+                            receive_bytes = new byte[n];
+                        }
+
+                        bool connection_accepted = true;
+
+                        if (valid_response)
+                        {
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
+                            if (received == n)
+                            {
+                                //IPShowForm f = new IPShowForm(...);
+                                //f.ShowDialog();
+                                //connection_accepted = f.Accepted;
+
+                                if (connection_accepted /*f.Accepted*/)
+                                {
+                                    valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_YES, Message.OK, true);
+                                }
+                                else
+                                {
+                                    valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_NO, Message.OK, true);
+                                }
+                            }
+                            else
+                            {
+                                valid_response = false;
+                            }
+                        }
+
+                        if (connection_accepted)
+                        {
+                            panel.Enabled = true;
+                        }
+
+                        while (valid_response && connection_accepted)
+                        {
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
+                            if (received == 1)
+                            {
+                                switch (receive_bytes[0])
+                                {
+                                    case (byte)Message.FILE_TRANSFER_REQUEST:
+                                        /*FileTransferOperation();*/
+                                        break;
+                                    case (byte)Message.DISCONNECT_REQUEST:
+                                        MessageBox.Show("A másik fél lecsatlakozott!");
+                                        connection_accepted = false;
+                                        valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
+                                        break;
+                                    default: valid_response = false; break;
+                                }
+                            }
+                            else
+                            {
+                                valid_response = false;
+                            }
+                        }
+
+                        if (!valid_response)
+                        {
+                            while (await sc.MessageCommunicationAsync(Message.INVALID, Message.OK, true)) { /*nothing*/ }
+                        }
+
+                        panel.Enabled = false;
+                        sc.Close();
+                    }
+                    else
+                    {
+                        bt_listen.Text = "Kapcsolatra várás";
+                        bt_connect.Enabled = true;
+                        listening = false;
+                        sc.Close();
+                    }
                 }
             }
         }

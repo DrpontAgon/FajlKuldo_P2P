@@ -342,35 +342,6 @@ namespace SP2P
             }
             catch (ObjectDisposedException) { return false; /*nothing*/ }
         }
-
-        public async Task<byte[]> GetBytesAmount(int db)
-        {
-            byte[] ret = new byte[db];
-            byte[] buffer = new byte[db];
-            int arrived = 0;
-            //int needed = db;
-            int arrived_sum = 0;
-            //buffer.CopyTo()
-            do
-            {
-                arrived += await ClientSocket.ReceiveAsyncTAP(buffer);
-                if (arrived_sum + arrived <= db)
-                {
-                    buffer.CopyTo(ret, arrived_sum);
-                    arrived_sum += arrived;
-                }
-                else
-                {
-                    int needed = db - arrived_sum;
-                    for (int i = 0; i < needed; i++)
-                    {
-                        ret[i + arrived_sum] = buffer[i];
-                    }
-                    arrived_sum = db;
-                }
-            } while (arrived_sum < db);
-            return ret;
-        }
         #endregion
 
         public void Close(bool silent = true)
@@ -399,6 +370,62 @@ namespace SP2P
                 }
             }
             catch (ObjectDisposedException) { /*nothing*/ }
+        }
+    }
+    static class SimpleConnectionExtensions
+    {
+        private static async Task<bool> SendMessageAsync(this SimpleConnection sc, Message message)
+        {
+            int sent = await sc.SendBytesAsync(new byte[] { (byte)message });
+            return sent == 1;
+        }
+
+        private static async Task<bool> ReceiveMessageAsync(this SimpleConnection sc, Message message)
+        {
+            byte[] message_byte = new byte[2];
+            int arrived = await sc.ReceiveBytesAsync(message_byte);
+            return arrived == 1 && message_byte[0] == (byte)message;
+        }
+
+        public static async Task<bool> MessageCommunicationAsync(this SimpleConnection sc, Message send_msg, Message receive_msg, bool send_first)
+        {
+            bool valid_response;
+            if (send_first)
+            {
+                valid_response = await sc.SendMessageAsync(send_msg);
+                if (valid_response)
+                {
+                    valid_response = await sc.ReceiveMessageAsync(receive_msg);
+                }
+            }
+            else
+            {
+                valid_response = await sc.ReceiveMessageAsync(receive_msg);
+                if (valid_response)
+                {
+                    valid_response = await sc.SendMessageAsync(send_msg);
+                }
+            }
+            return valid_response;
+        }
+
+        public static async Task<bool> MessageCommunicationAsync(this SimpleConnection sc, Message msg, bool send)
+        {
+            bool valid_response;
+            if (send)
+            {
+                valid_response = await sc.SendMessageAsync(msg);
+            }
+            else
+            {
+                valid_response = await sc.ReceiveMessageAsync(msg);
+            }
+            return valid_response;
+        }
+
+        public static async Task<bool> ValidateCommunicationAsync(this SimpleConnection sc, bool send_first)
+        {
+            return await sc.MessageCommunicationAsync(Message.OK, Message.OK, send_first);
         }
     }
 }
