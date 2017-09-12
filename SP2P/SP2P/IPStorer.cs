@@ -107,5 +107,11 @@ namespace SP2P
                 f.Write(arr, 0, arr.Length);
             }
         }
+
+        public static int GetStoredAmount()
+        {
+            byte[] arr = File.ReadAllBytes(Fpath);
+            return arr.Length / 4;
+        }
     }
 }
