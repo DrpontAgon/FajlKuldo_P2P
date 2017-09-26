@@ -102,7 +102,7 @@ namespace SP2P
                 listening = true;
                 while (listening)
                 {
-                    sc = new SimpleConnection(true);
+                    sc = new SimpleConnection(true, false);
                     if (await sc.AcceptAsync())
                     {
                         byte[] receive_bytes = new byte[1024];
@@ -251,7 +251,7 @@ namespace SP2P
                         connected = true;
                         while (connected)
                         {
-                            sc = new SimpleConnection(false);
+                            sc = new SimpleConnection(false, false);
                             if (await sc.ConnectAsync(ip, port))
                             {
                                 byte[] receive_bytes = new byte[1024];

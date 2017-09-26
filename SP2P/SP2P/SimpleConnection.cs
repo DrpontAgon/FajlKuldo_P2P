@@ -34,8 +34,11 @@ namespace SP2P
             }
         }
 
-        public SimpleConnection(bool server, bool throw_anyway = false, bool silent = true)
+        public bool Silent { get; set; } = true;
+
+        public SimpleConnection(bool server, bool silent = true, bool throw_anyway = false)
         {
+            Silent = silent;
             try
             {
                 if (server)
@@ -59,7 +62,7 @@ namespace SP2P
                 {
                     throw;
                 }
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -68,7 +71,7 @@ namespace SP2P
 
         #region Non-async
 
-        public bool Accept(int timeout_ms = 1000, bool silent = true)
+        public bool Accept(int timeout_ms = 1000)
         {
             try
             {
@@ -77,7 +80,7 @@ namespace SP2P
                     ClientSocket = ServerSocket.Accept();
                     ClientSocket.ReceiveTimeout = timeout_ms;
                     ClientSocket.SendTimeout = timeout_ms;
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Sikeres fogadás.");
                     }
@@ -85,7 +88,7 @@ namespace SP2P
                 }
                 else
                 {
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Csak szerver használhatja az Accept függvényt.");
                     }
@@ -94,7 +97,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -103,7 +106,7 @@ namespace SP2P
             catch (ObjectDisposedException) { return false; /*nothing*/ }
         }
 
-        public bool Connect(IPAddress ip, int port = 55585, int timeout_ms = 1000, bool silent = true)
+        public bool Connect(IPAddress ip, int port = 55585, int timeout_ms = 1000)
         {
             try
             {
@@ -112,7 +115,7 @@ namespace SP2P
                     ClientSocket.Connect(ip, port);
                     ClientSocket.ReceiveTimeout = timeout_ms;
                     ClientSocket.SendTimeout = timeout_ms;
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Sikeres csatlakozás.");
                     }
@@ -120,7 +123,7 @@ namespace SP2P
                 }
                 else
                 {
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Csak kliens használhatja a Connect függvényt.");
                     }
@@ -129,7 +132,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -138,12 +141,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return false; /*nothing*/ }
         }
 
-        public int SendBytes(byte[] bytes, bool silent = true)
+        public int SendBytes(byte[] bytes)
         {
             try
             {
                 int ret = ClientSocket.Send(bytes);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres fájlküldés.");
                 }
@@ -151,7 +154,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -160,12 +163,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return -1; /*nothing*/ }
         }
 
-        public int ReceiveBytes(byte[] bytes, bool silent = true)
+        public int ReceiveBytes(byte[] bytes)
         {
             try
             {
                 int ret = ClientSocket.Receive(bytes);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres adatfogadás.");
                 }
@@ -173,7 +176,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -182,12 +185,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return -1; /*nothing*/ }
         }
 
-        public bool SendFile(string path, bool silent = true)
+        public bool SendFile(string path)
         {
             try
             {
                 ClientSocket.SendFile(path);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres fájlküldés.");
                 }
@@ -195,7 +198,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -207,7 +210,7 @@ namespace SP2P
 
         #region Async
 
-        public async Task<bool> AcceptAsync(int timeout_ms = 1000, bool silent = true)
+        public async Task<bool> AcceptAsync(int timeout_ms = 1000)
         {
             try
             {
@@ -216,7 +219,7 @@ namespace SP2P
                     ClientSocket = await ServerSocket.AcceptAsyncTAP();
                     ClientSocket.ReceiveTimeout = timeout_ms;
                     ClientSocket.SendTimeout = timeout_ms;
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Sikeres fogadás.");
                     }
@@ -224,7 +227,7 @@ namespace SP2P
                 }
                 else
                 {
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Csak szerver használhatja az Accept függvényt.");
                     }
@@ -233,7 +236,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -242,7 +245,7 @@ namespace SP2P
             catch (ObjectDisposedException) { return false; /*nothing*/ }
         }
 
-        public async Task<bool> ConnectAsync(IPAddress ip, int port = 55585, int timeout_ms = 1000, bool silent = true)
+        public async Task<bool> ConnectAsync(IPAddress ip, int port = 55585, int timeout_ms = 1000)
         {
             try
             {
@@ -251,7 +254,7 @@ namespace SP2P
                     await ClientSocket.ConnectAsyncTAP(ip, port);
                     ClientSocket.ReceiveTimeout = timeout_ms;
                     ClientSocket.SendTimeout = timeout_ms;
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Sikeres csatlakozás.");
                     }
@@ -259,7 +262,7 @@ namespace SP2P
                 }
                 else
                 {
-                    if (!silent)
+                    if (!Silent)
                     {
                         MessageBox.Show("Csak kliens használhatja a Connect függvényt.");
                     }
@@ -268,7 +271,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -277,12 +280,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return false; /*nothing*/ }
         }
 
-        public async Task<int> SendBytesAsync(byte[] bytes, bool silent = true)
+        public async Task<int> SendBytesAsync(byte[] bytes)
         {
             try
             {
                 int ret = await ClientSocket.SendAsyncTAP(bytes);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres adatküldés.");
                 }
@@ -290,7 +293,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -299,12 +302,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return -1; /*nothing*/ }
         }
 
-        public async Task<int> ReceiveBytesAsync(byte[] bytes, bool silent = true)
+        public async Task<int> ReceiveBytesAsync(byte[] bytes)
         {
             try
             {
                 int ret = await ClientSocket.ReceiveAsyncTAP(bytes);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres adatfogadás.");
                 }
@@ -312,7 +315,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -321,12 +324,12 @@ namespace SP2P
             catch (ObjectDisposedException) { return -1; /*nothing*/ }
         }
 
-        public async Task<bool> SendFileAsync(string path, bool silent = true)
+        public async Task<bool> SendFileAsync(string path)
         {
             try
             {
                 await ClientSocket.SendFileAsyncTAP(path);
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres fájlküldés.");
                 }
@@ -334,7 +337,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
@@ -344,7 +347,7 @@ namespace SP2P
         }
         #endregion
 
-        public void Close(bool silent = true)
+        public void Close()
         {
             try
             {
@@ -357,14 +360,14 @@ namespace SP2P
                 {
                     ServerSocket.Close();
                 }
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show("Sikeres szétkapcsolás.");
                 }
             }
             catch (SocketException e)
             {
-                if (!silent)
+                if (!Silent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
                 }
