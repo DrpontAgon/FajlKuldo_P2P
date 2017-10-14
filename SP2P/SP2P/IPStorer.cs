@@ -36,9 +36,11 @@ namespace SP2P
             string dir_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SP2P");
             if (!Directory.Exists(dir_path)) Directory.CreateDirectory(dir_path);
             Fpath = Path.Combine(dir_path, "IPStore.ips");
+            TrueFpath = Fpath;
         }
 
         public static string Fpath { get; set; }
+        public static string TrueFpath { get; private set; }
 
         /// <summary>
         /// 

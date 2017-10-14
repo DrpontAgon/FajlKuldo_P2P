@@ -17,6 +17,7 @@ namespace SP2P
         bool connected = false;
         bool port_open = false;
         List<string> file_paths = new List<string>();
+        SimpleConnection sc;
 
         public MainForm()
         {
@@ -41,7 +42,6 @@ namespace SP2P
             {
                 MessageBox.Show("Port műveletek nem lehetségesek a programon belül!");
             }
-            SimpleConnection.IsSilent = false;
         }
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
@@ -50,8 +50,7 @@ namespace SP2P
             lb_lan_inf.BackColor = lb_lan.BackColor = IPChangeChecker.PrivateIpIsLoopback ? Color.Red : Color.LimeGreen;
             lb_wan.Text = IPChangeChecker.PublicIP.ToString();
             lb_lan.Text = IPChangeChecker.PrivateIP.ToString();
-            IPChangeChecker.PublicIP.CheckAndStoreIP();
-            IPChangeChecker.PrivateIP.CheckAndStoreIP();
+            //e.PublicIP.CheckAndLogIP();
         }
 
         private async void bt_port_openclose_Click(object sender, EventArgs e)
@@ -94,7 +93,7 @@ namespace SP2P
                 bt_connect.Enabled = true;
                 panel.Enabled = false;
                 listening = false;
-                SimpleConnection.Close();
+                sc.Close();
             }
             else
             {
@@ -103,24 +102,36 @@ namespace SP2P
                 listening = true;
                 while (listening)
                 {
-                    if (await SimpleConnection.Accept())
+                    sc = new SimpleConnection(true, false);
+                    if (await sc.AcceptAsync())
                     {
                         byte[] receive_bytes = new byte[1024];
                         byte[] send_bytes = new byte[1];
                         int received;
                         bool valid_response;
 
-                        valid_response = await SimpleConnection.MessageCommunication(Message.OK, Message.CONNECT_REQUEST, false);
+                        //received = await sc.ReceiveBytesAsync(receive_bytes);
+                        //if (received == 1 && receive_bytes[0] == (byte)Message.CONNECT_REQUEST)
+                        //{
+                        //    send_bytes[0] = (byte)Message.OK;
+                        //    await sc.SendBytesAsync(send_bytes);
+                        //}
+                        //else
+                        //{
+                        //    invalid_response = true;
+                        //}
+
+                        valid_response = await sc.MessageCommunicationAsync(Message.OK, Message.CONNECT_REQUEST, false);
 
                         int n = 0;
 
                         if (valid_response)
                         {
-                            received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
                             if (received == 4)
                             {
                                 n = BitConverter.ToInt32(receive_bytes, 0) * 4;
-                                valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                             }
                             else
                             {
@@ -137,7 +148,7 @@ namespace SP2P
 
                         if (valid_response)
                         {
-                            received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
                             if (received == n)
                             {
                                 string ip_strings = "Elfogadja-e a kapcsolatot ettől a féltől?\n";
@@ -148,7 +159,8 @@ namespace SP2P
                                     ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
                                     ip_strings += $"\t{(new IPAddress(ip_bytes))}\n";
                                 }
-                                connection_accepted = MessageBox.Show(ip_strings, "Csatlakozás", MessageBoxButtons.YesNo) == DialogResult.Yes;
+                                DialogResult dr = MessageBox.Show(ip_strings, "Csatlakozás", MessageBoxButtons.YesNo);
+                                connection_accepted = dr == DialogResult.Yes;
 
                                 //IPAddress[] ips = new IPAddress[n / 4];
                                 //for (int i = 0; i < ips.Length; i++)
@@ -164,7 +176,7 @@ namespace SP2P
 
                                 if (connection_accepted)
                                 {
-                                    valid_response = await SimpleConnection.MessageCommunication(Message.ANSWER_YES, Message.OK, true);
+                                    valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_YES, Message.OK, true);
                                     //valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_YES, true);
                                     //if (valid_response)
                                     //{
@@ -173,7 +185,7 @@ namespace SP2P
                                 }
                                 else
                                 {
-                                    valid_response = await SimpleConnection.MessageCommunication(Message.ANSWER_NO, Message.OK, true);
+                                    valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_NO, Message.OK, true);
                                     //valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_NO, true);
                                     //if (valid_response)
                                     //{
@@ -194,22 +206,22 @@ namespace SP2P
 
                         while (valid_response && connection_accepted)
                         {
-                            received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            received = await sc.ReceiveBytesAsync(receive_bytes);
                             if (received == 1)
                             {
                                 switch (receive_bytes[0])
                                 {
                                     case (byte)Message.FILE_TRANSFER_REQUEST:
-                                        valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                        valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                         if (valid_response)
                                         {
-                                            /*await FileTransferOperation();*/
+                                            /*FileTransferOperation();*/
                                         }
                                         break;
                                     case (byte)Message.DISCONNECT_REQUEST:
                                         MessageBox.Show("A másik fél lecsatlakozott!");
                                         connection_accepted = false;
-                                        valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                        valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                         break;
                                     default: valid_response = false; break;
                                 }
@@ -222,18 +234,18 @@ namespace SP2P
 
                         if (!valid_response)
                         {
-                            while (await SimpleConnection.MessageCommunication(Message.INVALID, Message.OK, true)) { /*nothing*/ }
+                            while (await sc.MessageCommunicationAsync(Message.INVALID, Message.OK, true)) { /*nothing*/ }
                         }
 
                         panel.Enabled = false;
-                        SimpleConnection.Close();
+                        sc.Close();
                     } // await sc.AcceptAsync()
                     else
                     {
                         bt_listen.Text = "Kapcsolatra várás";
                         bt_connect.Enabled = true;
                         listening = false;
-                        SimpleConnection.Close();
+                        sc.Close();
                     }
                 } // listening
             }
@@ -247,7 +259,7 @@ namespace SP2P
                 bt_listen.Enabled = true;
                 panel.Enabled = false;
                 connected = false;
-                SimpleConnection.Close();
+                sc.Close();
             }
             else
             {
@@ -261,7 +273,8 @@ namespace SP2P
                         connected = true;
                         while (connected)
                         {
-                            if (await SimpleConnection.Connect(ip, port))
+                            sc = new SimpleConnection(false, false);
+                            if (await sc.ConnectAsync(ip, port))
                             {
                                 byte[] receive_bytes = new byte[1024];
                                 byte[] send_bytes = new byte[1];
@@ -269,16 +282,16 @@ namespace SP2P
                                 int received;
                                 bool valid_response;
 
-                                valid_response = await SimpleConnection.MessageCommunication(Message.CONNECT_REQUEST, Message.OK, true);
+                                valid_response = await sc.MessageCommunicationAsync(Message.CONNECT_REQUEST, Message.OK, true);
 
                                 int n = IPStorer.GetStoredAmount();
 
                                 if (valid_response)
                                 {
-                                    sent = await SimpleConnection.SendBytes(BitConverter.GetBytes(n));
+                                    sent = await sc.SendBytesAsync(BitConverter.GetBytes(n));
                                     if (sent == 4)
                                     {
-                                        valid_response = await SimpleConnection.MessageCommunication(Message.OK, false);
+                                        valid_response = await sc.MessageCommunicationAsync(Message.OK, false);
                                     }
                                     else
                                     {
@@ -290,21 +303,21 @@ namespace SP2P
 
                                 if (valid_response)
                                 {
-                                    valid_response = await SimpleConnection.SendFile(IPStorer.Fpath);
+                                    valid_response = await sc.SendFileAsync(IPStorer.Fpath);
                                     if (valid_response)
                                     {
-                                        received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                                        received = await sc.ReceiveBytesAsync(receive_bytes);
                                         if (received == 1)
                                         {
                                             switch (receive_bytes[0])
                                             {
                                                 case (byte)Message.ANSWER_YES:
                                                     connection_accepted = true;
-                                                    valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                                    valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                                     break;
                                                 case (byte)Message.ANSWER_NO:
                                                     connection_accepted = false;
-                                                    valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                                    valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                                     break;
                                                 default: valid_response = false; break;
                                             }
@@ -323,22 +336,22 @@ namespace SP2P
 
                                 while (valid_response && connection_accepted)
                                 {
-                                    received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                                    received = await sc.ReceiveBytesAsync(receive_bytes);
                                     if (received == 1)
                                     {
                                         switch (receive_bytes[0])
                                         {
                                             case (byte)Message.FILE_TRANSFER_REQUEST:
-                                                valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                                valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                                 if (valid_response)
                                                 {
-                                                    /*await FileTransferOperation();*/
+                                                    /*FileTransferOperation();*/
                                                 }
                                                 break;
                                             case (byte)Message.DISCONNECT_REQUEST:
                                                 MessageBox.Show("A másik fél lecsatlakozott!");
                                                 connection_accepted = false;
-                                                valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                                valid_response = await sc.MessageCommunicationAsync(Message.OK, true);
                                                 break;
                                             default: valid_response = false; break;
                                         }
@@ -351,18 +364,18 @@ namespace SP2P
 
                                 if (!valid_response)
                                 {
-                                    while (await SimpleConnection.MessageCommunication(Message.INVALID, Message.OK, true)) { /*nothing*/ }
+                                    while (await sc.MessageCommunicationAsync(Message.INVALID, Message.OK, true)) { /*nothing*/ }
                                 }
 
                                 panel.Enabled = false;
-                                SimpleConnection.Close();
+                                sc.Close();
                             } // await sc.ConnectAsync(ip, port)
                             else
                             {
                                 bt_connect.Text = "Csatlakozás";
                                 bt_listen.Enabled = true;
                                 connected = false;
-                                SimpleConnection.Close();
+                                sc.Close();
                             }
                         } // connected
                     }
@@ -380,32 +393,9 @@ namespace SP2P
 
         private async void bt_send_Click(object sender, EventArgs e)
         {
-            if (await SimpleConnection.MessageCommunication(Message.FILE_TRANSFER_REQUEST, Message.OK, true))
+            if (await sc.MessageCommunicationAsync(Message.FILE_TRANSFER_REQUEST, Message.OK, true))
             {
-                var indices = lb_files.SelectedIndices;
-                List<byte> send_bytes = new List<byte>();
-
-                send_bytes.AddRange(BitConverter.GetBytes(indices.Count));
-                foreach (int item in indices)
-                {
-                    send_bytes.AddRange(Encoding.Default.GetBytes(lb_files.Items[item].ToString()));
-                    send_bytes.Add(0);
-                }
-
-                int received = await SimpleConnection.SendBytes(send_bytes.ToArray());
-                bool valid_response = await SimpleConnection.MessageCommunication(Message.OK, false);
-
-                for (int i = 0; i < indices.Count; i++)
-                {
-                    if (!valid_response) break;
-                    valid_response = await SimpleConnection.SendFile(file_paths[indices[i]]);
-                }
-
-                if (!valid_response)
-                {
-                    MessageBox.Show("Hiba történt a fájlküldés folyamán!");
-                }
-
+                //...
             }
             else
             {
@@ -453,6 +443,31 @@ namespace SP2P
             }
         }
 
+        private void tb_ip_1_TextChanged(object sender, EventArgs e)
+        {
+            //if (tb_ip_1.Text.Length == 3) tb_ip_2.Focus();
+        }
+
+        private void tb_ip_2_TextChanged(object sender, EventArgs e)
+        {
+            //if (tb_ip_2.Text.Length == 3) tb_ip_3.Focus();
+        }
+
+        private void tb_ip_3_TextChanged(object sender, EventArgs e)
+        {
+            //if (tb_ip_3.Text.Length == 3) tb_ip_4.Focus();
+        }
+
+        private void tb_ip_4_TextChanged(object sender, EventArgs e)
+        {
+            //if (tb_ip_4.Text.Length == 3) tb_port.Focus();
+        }
+
+        private void tb_port_TextChanged(object sender, EventArgs e)
+        {
+            //if (tb_port.Text.Length == 5) bt_connect.Focus();
+        }
+
         private void cms_item_ip_Click(object sender, EventArgs e)
         {
             IPChangeChecker.ForceCheck();
@@ -460,10 +475,9 @@ namespace SP2P
 
         private void cms_item_settings_Click(object sender, EventArgs e)
         {
-            using (SettingsForm f = new SettingsForm())
-            {
-                f.ShowDialog(); 
-            }
+            SettingsForm f = new SettingsForm();
+            f.ShowDialog();
+            f.Dispose();
         }
 
         private void cms_Opening(object sender, CancelEventArgs e)

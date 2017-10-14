@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace SP2P_old
+namespace SP2P
 {
     class IPChangeChecker
     {

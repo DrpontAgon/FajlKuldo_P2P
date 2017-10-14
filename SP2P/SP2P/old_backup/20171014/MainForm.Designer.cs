@@ -78,6 +78,7 @@
             this.tb_ip_1.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_1.TabIndex = 0;
             this.tb_ip_1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_1.TextChanged += new System.EventHandler(this.tb_ip_1_TextChanged);
             // 
             // label1
             // 
@@ -111,6 +112,7 @@
             this.tb_ip_2.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_2.TabIndex = 1;
             this.tb_ip_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_2.TextChanged += new System.EventHandler(this.tb_ip_2_TextChanged);
             // 
             // label3
             // 
@@ -133,6 +135,7 @@
             this.tb_ip_4.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_4.TabIndex = 3;
             this.tb_ip_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_4.TextChanged += new System.EventHandler(this.tb_ip_4_TextChanged);
             // 
             // label4
             // 
@@ -155,6 +158,7 @@
             this.tb_ip_3.Size = new System.Drawing.Size(30, 23);
             this.tb_ip_3.TabIndex = 2;
             this.tb_ip_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_ip_3.TextChanged += new System.EventHandler(this.tb_ip_3_TextChanged);
             // 
             // tb_port
             // 
@@ -166,6 +170,7 @@
             this.tb_port.Size = new System.Drawing.Size(50, 23);
             this.tb_port.TabIndex = 4;
             this.tb_port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tb_port.TextChanged += new System.EventHandler(this.tb_port_TextChanged);
             // 
             // lb_wan_inf
             // 
