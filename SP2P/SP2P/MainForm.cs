@@ -21,12 +21,15 @@ namespace SP2P
         public MainForm()
         {
             InitializeComponent();
+            RuntimeLogger.Open("log.txt");
+            RuntimeLogger.WriteLine("Program Start.");
+            IPChangeChecker.IPChanged += IPChangeEventMethod;
+            IPChangeChecker.ForceCheck();
+            SimpleConnection.IsSilent = false;
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            IPChangeChecker.IPChanged += IPChangeEventMethod;
-            IPChangeChecker.ForceCheck();
             if (await PortOpener.GetDevice())
             {
                 if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
@@ -41,7 +44,6 @@ namespace SP2P
             {
                 MessageBox.Show("Port műveletek nem lehetségesek a programon belül!");
             }
-            SimpleConnection.IsSilent = false;
         }
 
         private void IPChangeEventMethod(object sender, IPChangedEventArgs e)
@@ -472,6 +474,13 @@ namespace SP2P
             {
                 e.Cancel = true;
             }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            RuntimeLogger.WriteLine("Program terminating.");
+            RuntimeLogger.Write("\n" + new string('-', 50));
+            RuntimeLogger.Close();
         }
     }
 }
