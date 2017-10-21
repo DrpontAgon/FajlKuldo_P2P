@@ -266,6 +266,50 @@ namespace SP2P
         {
             return await MessageCommunication(Message.OK, Message.OK, send_first);
         }
+        public static string FormatCommunication(bool valid_response, Message send_msg, Message receive_msg, bool send_first)
+        {
+            string validity_str = $"Validity: {valid_response}";
+            string send_str = "Send: ";
+            switch (send_msg)
+            {
+                case Message.OK: send_str += "OK"; break;
+                case Message.INVALID: send_str += "INVALID"; break;
+                case Message.CONNECT_REQUEST: send_str += "CONNECT_REQUEST"; break;
+                case Message.DISCONNECT_REQUEST: send_str += "DISCONNECT_REQUEST"; break;
+                case Message.FILE_TRANSFER_REQUEST: send_str += "FILE_TRANSFER_REQUEST"; break;
+                case Message.ANSWER_YES: send_str += "ANSWER_YES"; break;
+                case Message.ANSWER_NO: send_str += "ANSWER_NO"; break;
+            }
+            string get_str = "Get: ";
+            switch (receive_msg)
+            {
+                case Message.OK: get_str += "OK"; break;
+                case Message.INVALID: get_str += "INVALID"; break;
+                case Message.CONNECT_REQUEST: get_str += "CONNECT_REQUEST"; break;
+                case Message.DISCONNECT_REQUEST: get_str += "DISCONNECT_REQUEST"; break;
+                case Message.FILE_TRANSFER_REQUEST: get_str += "FILE_TRANSFER_REQUEST"; break;
+                case Message.ANSWER_YES: get_str += "ANSWER_YES"; break;
+                case Message.ANSWER_NO: get_str += "ANSWER_NO"; break;
+            }
+            if (send_first) return $"{validity_str} {send_str} {get_str}.";
+            else return $"{validity_str} {get_str} {send_str}.";
+        }
+        public static string FormatCommunication(bool valid_response, Message msg, bool send)
+        {
+            string validity_str = $"Validity: {valid_response}";
+            string msg_str = send ? "Send: " : "Get: ";
+            switch (msg)
+            {
+                case Message.OK: msg_str += "OK"; break;
+                case Message.INVALID: msg_str += "INVALID"; break;
+                case Message.CONNECT_REQUEST: msg_str += "CONNECT_REQUEST"; break;
+                case Message.DISCONNECT_REQUEST: msg_str += "DISCONNECT_REQUEST"; break;
+                case Message.FILE_TRANSFER_REQUEST: msg_str += "FILE_TRANSFER_REQUEST"; break;
+                case Message.ANSWER_YES: msg_str += "ANSWER_YES"; break;
+                case Message.ANSWER_NO: msg_str += "ANSWER_NO"; break;
+            }
+            return $"{validity_str} {msg_str}.";
+        }
         #endregion
     }
 }

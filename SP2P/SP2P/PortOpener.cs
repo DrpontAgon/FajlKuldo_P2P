@@ -33,20 +33,12 @@
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Linq;
 using Open.Nat;
-using System.ComponentModel;
 
 namespace SP2P
 {
     class PortOpener
     {
-        //static PortOpener()
-        //{
-        //    BackgroundWorker worker = new BackgroundWorker();
-        //    worker.DoWork += async (object sender, DoWorkEventArgs e) => { await GetDevice(); };
-        //}
 
         public static async Task<bool> GetDevice()
         {
@@ -63,17 +55,7 @@ namespace SP2P
             }
         }
 
-        //public static async Task WaitForDevice()
-        //{
-        //    while (DeviceExist == null)
-        //    {
-        //        await Task.Delay(1000);
-        //    }
-        //}
-
         public static NatDevice Device { get; private set; } = null;
-
-        //public static bool? DeviceExist { get; private set; } = null;
 
         public static async Task<bool> OpenPort(int? nullable_port = null, bool silent = true)
         {

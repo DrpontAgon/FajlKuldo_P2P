@@ -25,23 +25,27 @@ namespace SP2P
             RuntimeLogger.WriteLine("Program Start.");
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
-            SimpleConnection.IsSilent = false;
+            SimpleConnection.IsSilent = true;
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
+            RuntimeLogger.WriteLine("Trying to get NAT device...");
             if (await PortOpener.GetDevice())
             {
+                RuntimeLogger.WriteLine("Successfully found NAT device.");
                 if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
                 {
                     MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
                 }
                 port_open = await PortOpener.IsPortOpen();
+                RuntimeLogger.WriteLine($"{Settings.Port} is open: {port_open}");
                 bt_port_openclose.Text = port_open ? "Port zárása" : "Port nyitása";
                 bt_port_openclose.Enabled = true; 
             }
             else
             {
+                RuntimeLogger.WriteLine("NAT device not found.");
                 MessageBox.Show("Port műveletek nem lehetségesek a programon belül!");
             }
         }
@@ -53,7 +57,8 @@ namespace SP2P
             lb_wan.Text = IPChangeChecker.PublicIP.ToString();
             lb_lan.Text = IPChangeChecker.PrivateIP.ToString();
             IPChangeChecker.PublicIP.CheckAndStoreIP();
-            IPChangeChecker.PrivateIP.CheckAndStoreIP();
+            //IPChangeChecker.PrivateIP.CheckAndStoreIP();
+            RuntimeLogger.WriteLine($"IP changed.");
         }
 
         private async void bt_port_openclose_Click(object sender, EventArgs e)
@@ -62,26 +67,32 @@ namespace SP2P
             bt_port_openclose.Enabled = false;
             if (port_open)
             {
+                RuntimeLogger.WriteLine($"Closing port...");
                 if (await PortOpener.ClosePort())
                 {
+                    RuntimeLogger.WriteLine($"Port successfully closed.");
                     bt_port_openclose.Text = "Port nyitása";
                     port_open = false;
                 }
                 else
                 {
+                    RuntimeLogger.WriteLine($"Port could not be closed.");
                     bt_port_openclose.Text = "Port zárása";
                 }
                 bt_port_openclose.Enabled = true;
             }
             else
             {
+                RuntimeLogger.WriteLine($"Opening port...");
                 if (await PortOpener.OpenPort())
                 {
+                    RuntimeLogger.WriteLine($"Port successfully opened.");
                     bt_port_openclose.Text = "Port zárása";
                     port_open = true;
                 }
                 else
                 {
+                    RuntimeLogger.WriteLine($"Port successfully opened.");
                     bt_port_openclose.Text = "Port nyitása";
                 }
                 bt_port_openclose.Enabled = true;
@@ -92,37 +103,53 @@ namespace SP2P
         {
             if (listening)
             {
+                RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
+                bool valid_response = await SimpleConnection.MessageCommunication(Message.DISCONNECT_REQUEST, Message.OK, true);
+                if (!valid_response)
+                {
+                    MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                }
                 bt_listen.Text = "Kapcsolatra várás";
                 bt_connect.Enabled = true;
                 panel.Enabled = false;
                 listening = false;
                 SimpleConnection.Close();
+                RuntimeLogger.WriteLine($"Stopped waiting for connection.");
             }
             else
             {
+                RuntimeLogger.WriteLine($"Started waiting for connection...");
                 bt_listen.Text = "Várás befejezése";
                 bt_connect.Enabled = false;
                 listening = true;
+                bool connection_accepted = true;
                 while (listening)
                 {
-                    if (await SimpleConnection.Accept())
+                    if (connection_accepted)
                     {
+                        await SimpleConnection.Accept();
+                        RuntimeLogger.WriteLine($"Connection started.");
                         byte[] receive_bytes = new byte[1024];
                         byte[] send_bytes = new byte[1];
-                        int received;
+                        int received = 0;
                         bool valid_response;
 
+                        RuntimeLogger.WriteLine("Waiting for Connection request...");
                         valid_response = await SimpleConnection.MessageCommunication(Message.OK, Message.CONNECT_REQUEST, false);
+                        RuntimeLogger.WriteLine(SimpleConnection.FormatCommunication(valid_response, Message.OK, Message.CONNECT_REQUEST, false));
 
                         int n = 0;
 
                         if (valid_response)
                         {
                             received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            RuntimeLogger.WriteLine($"Expected to receive 4 bytes, received {received} byte(s).");
                             if (received == 4)
                             {
                                 n = BitConverter.ToInt32(receive_bytes, 0) * 4;
+                                RuntimeLogger.WriteLine($"Expecting to receive {n} byte(s) later.");
                                 valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
+                                RuntimeLogger.WriteLine($"Validity: {valid_response}.");
                             }
                             else
                             {
@@ -135,11 +162,10 @@ namespace SP2P
                             receive_bytes = new byte[n];
                         }
 
-                        bool connection_accepted = false;
-
                         if (valid_response)
                         {
                             received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            RuntimeLogger.WriteLine($"Expected to receive {n} byte(s), received {received} byte(s).");
                             if (received == n)
                             {
                                 string ip_strings = "Elfogadja-e a kapcsolatot ettől a féltől?\n";
@@ -151,6 +177,9 @@ namespace SP2P
                                     ip_strings += $"\t{(new IPAddress(ip_bytes))}\n";
                                 }
                                 connection_accepted = MessageBox.Show(ip_strings, "Csatlakozás", MessageBoxButtons.YesNo) == DialogResult.Yes;
+
+                                RuntimeLogger.WriteLine($"Connection Accepted: {connection_accepted}.");
+
 
                                 //IPAddress[] ips = new IPAddress[n / 4];
                                 //for (int i = 0; i < ips.Length; i++)
@@ -164,9 +193,11 @@ namespace SP2P
                                 //    connection_accepted = f.Accepted;
                                 //}
 
+                                RuntimeLogger.WriteLine($"Sending the answer back...");
                                 if (connection_accepted)
                                 {
                                     valid_response = await SimpleConnection.MessageCommunication(Message.ANSWER_YES, Message.OK, true);
+                                    RuntimeLogger.WriteLine(SimpleConnection.FormatCommunication(valid_response, Message.ANSWER_YES, Message.OK, true));
                                     //valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_YES, true);
                                     //if (valid_response)
                                     //{
@@ -176,6 +207,7 @@ namespace SP2P
                                 else
                                 {
                                     valid_response = await SimpleConnection.MessageCommunication(Message.ANSWER_NO, Message.OK, true);
+                                    RuntimeLogger.WriteLine(SimpleConnection.FormatCommunication(valid_response, Message.ANSWER_NO, Message.OK, true));
                                     //valid_response = await sc.MessageCommunicationAsync(Message.ANSWER_NO, true);
                                     //if (valid_response)
                                     //{
@@ -196,7 +228,9 @@ namespace SP2P
 
                         while (valid_response && connection_accepted)
                         {
+                            RuntimeLogger.WriteLine("Waiting for other client to respond...");
                             received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                            RuntimeLogger.WriteLine($"Expected to receive 1 byte, received {received} byte(s).");
                             if (received == 1)
                             {
                                 switch (receive_bytes[0])
@@ -209,11 +243,15 @@ namespace SP2P
                                         }
                                         break;
                                     case (byte)Message.DISCONNECT_REQUEST:
+                                        RuntimeLogger.WriteLine($"Other Client requested to disconnect.");
                                         MessageBox.Show("A másik fél lecsatlakozott!");
                                         connection_accepted = false;
                                         valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
                                         break;
-                                    default: valid_response = false; break;
+                                    default:
+                                        RuntimeLogger.WriteLine($"Invalid answer.");
+                                        valid_response = false;
+                                        break;
                                 }
                             }
                             else
@@ -224,6 +262,7 @@ namespace SP2P
 
                         if (!valid_response)
                         {
+                            RuntimeLogger.WriteLine($"Attempting to send back INVALID.");
                             while (await SimpleConnection.MessageCommunication(Message.INVALID, Message.OK, true)) { /*nothing*/ }
                         }
 
@@ -232,6 +271,7 @@ namespace SP2P
                     } // await sc.AcceptAsync()
                     else
                     {
+                        RuntimeLogger.WriteLine($"Connection closed.");
                         bt_listen.Text = "Kapcsolatra várás";
                         bt_connect.Enabled = true;
                         listening = false;
@@ -245,11 +285,18 @@ namespace SP2P
         {
             if (connected)
             {
+                RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
+                bool valid_response = await SimpleConnection.MessageCommunication(Message.DISCONNECT_REQUEST, Message.OK, true);
+                if (!valid_response)
+                {
+                    MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                }
                 bt_connect.Text = "Csatlakozás";
                 bt_listen.Enabled = true;
                 panel.Enabled = false;
                 connected = false;
                 SimpleConnection.Close();
+                RuntimeLogger.WriteLine($"Stopped accepting the connection.");
             }
             else
             {
@@ -258,29 +305,37 @@ namespace SP2P
                 {
                     if (port.PortInLimits(50000, 65535))
                     {
+                        RuntimeLogger.WriteLine($"Started accepting the connection...");
                         bt_connect.Text = "Lecsatlakozás";
                         bt_listen.Enabled = false;
                         connected = true;
+                        bool connection_accepted = true;
                         while (connected)
                         {
-                            if (await SimpleConnection.Connect(ip, port))
+                            if (connection_accepted)
                             {
+                                await SimpleConnection.Connect(ip, port);
+                                RuntimeLogger.WriteLine($"Connection started.");
                                 byte[] receive_bytes = new byte[1024];
                                 byte[] send_bytes = new byte[1];
-                                int sent;
-                                int received;
+                                int sent = 0;
+                                int received = 0;
                                 bool valid_response;
 
+                                RuntimeLogger.WriteLine("Sending Connection request...");
                                 valid_response = await SimpleConnection.MessageCommunication(Message.CONNECT_REQUEST, Message.OK, true);
+                                RuntimeLogger.WriteLine(SimpleConnection.FormatCommunication(valid_response, Message.CONNECT_REQUEST, Message.OK, true));
 
                                 int n = IPStorer.GetStoredAmount();
 
                                 if (valid_response)
                                 {
                                     sent = await SimpleConnection.SendBytes(BitConverter.GetBytes(n));
+                                    RuntimeLogger.WriteLine($"Expected to send 4 bytes, sent {sent} byte(s).");
                                     if (sent == 4)
                                     {
                                         valid_response = await SimpleConnection.MessageCommunication(Message.OK, false);
+                                        RuntimeLogger.WriteLine($"Validity: {valid_response}.");
                                     }
                                     else
                                     {
@@ -288,11 +343,10 @@ namespace SP2P
                                     }
                                 }
 
-                                bool connection_accepted = false;
-
                                 if (valid_response)
                                 {
                                     valid_response = await SimpleConnection.SendFile(IPStorer.Fpath);
+                                    RuntimeLogger.WriteLine($"Expected to send 4 bytes, sent {sent} byte(s).");
                                     if (valid_response)
                                     {
                                         received = await SimpleConnection.ReceiveBytes(receive_bytes);
@@ -325,7 +379,9 @@ namespace SP2P
 
                                 while (valid_response && connection_accepted)
                                 {
+                                    RuntimeLogger.WriteLine("Waiting for other client to respond...");
                                     received = await SimpleConnection.ReceiveBytes(receive_bytes);
+                                    RuntimeLogger.WriteLine($"Expected to receive 1 byte, received {received} byte(s).");
                                     if (received == 1)
                                     {
                                         switch (receive_bytes[0])
@@ -338,11 +394,15 @@ namespace SP2P
                                                 }
                                                 break;
                                             case (byte)Message.DISCONNECT_REQUEST:
+                                                RuntimeLogger.WriteLine($"Other Client requested to disconnect.");
                                                 MessageBox.Show("A másik fél lecsatlakozott!");
                                                 connection_accepted = false;
                                                 valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
                                                 break;
-                                            default: valid_response = false; break;
+                                            default:
+                                                RuntimeLogger.WriteLine($"Invalid answer.");
+                                                valid_response = false;
+                                                break;
                                         }
                                     }
                                     else
