@@ -25,7 +25,7 @@ namespace SP2P
             RuntimeLogger.WriteLine("Program Start.");
             IPChangeChecker.IPChanged += IPChangeEventMethod;
             IPChangeChecker.ForceCheck();
-            SimpleConnection.IsSilent = true;
+            SimpleConnection.IsSilent = false;
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -105,9 +105,12 @@ namespace SP2P
             {
                 RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
                 bool valid_response = await SimpleConnection.MessageCommunication(Message.DISCONNECT_REQUEST, Message.OK, true);
-                if (!valid_response)
+                if (SimpleConnection.IsConnected)
                 {
-                    MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                    if (!valid_response)
+                    {
+                        MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                    }
                 }
                 bt_listen.Text = "Kapcsolatra várás";
                 bt_connect.Enabled = true;
@@ -168,17 +171,17 @@ namespace SP2P
                             RuntimeLogger.WriteLine($"Expected to receive {n} byte(s), received {received} byte(s).");
                             if (received == n)
                             {
-                                string ip_strings = "Elfogadja-e a kapcsolatot ettől a féltől?\n";
+                                //string ip_strings = "Elfogadja-e a kapcsolatot ettől a féltől?\n";
                                 byte[] ip_bytes;
 
-                                for (int i = 0; i < n / 4; i++)
-                                {
-                                    ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
-                                    ip_strings += $"\t{(new IPAddress(ip_bytes))}\n";
-                                }
-                                connection_accepted = MessageBox.Show(ip_strings, "Csatlakozás", MessageBoxButtons.YesNo) == DialogResult.Yes;
+                                //for (int i = 0; i < n / 4; i++)
+                                //{
+                                //    ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
+                                //    ip_strings += $"\t{(new IPAddress(ip_bytes))}\n";
+                                //}
+                                //connection_accepted = MessageBox.Show(ip_strings, "Csatlakozás", MessageBoxButtons.YesNo) == DialogResult.Yes;
 
-                                RuntimeLogger.WriteLine($"Connection Accepted: {connection_accepted}.");
+                                //RuntimeLogger.WriteLine($"Connection Accepted: {connection_accepted}.");
 
 
                                 IPAddress[] ips = new IPAddress[n / 4];

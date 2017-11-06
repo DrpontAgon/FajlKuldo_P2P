@@ -126,6 +126,10 @@ namespace SP2P
         {
             try
             {
+                if (!IsConnected)
+                {
+                    return -60;
+                }
                 int ret = await ClientSocket.SendAsyncTAP(bytes);
                 if (!IsSilent)
                 {
@@ -147,6 +151,10 @@ namespace SP2P
         {
             try
             {
+                if (!IsConnected)
+                {
+                    return -60;
+                }
                 int ret = await ClientSocket.ReceiveAsyncTAP(bytes);
                 if (!IsSilent)
                 {
