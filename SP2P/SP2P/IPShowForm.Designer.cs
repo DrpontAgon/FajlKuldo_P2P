@@ -60,7 +60,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(284, 262);
             this.label1.TabIndex = 1;
-            this.label1.Text = "El kívánja fogadni a kapcsolatot tőle?";
+            this.label1.Text = "\r\nEl kívánja fogadni a kapcsolatot tőle?";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // IPShowForm
