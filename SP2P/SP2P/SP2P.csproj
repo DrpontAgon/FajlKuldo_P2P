@@ -94,6 +94,9 @@
     </Compile>
     <Compile Include="SimpleConnection.cs" />
     <Compile Include="UtilityClasses.cs" />
+    <EmbeddedResource Include="IPShowForm.resx">
+      <DependentUpon>IPShowForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

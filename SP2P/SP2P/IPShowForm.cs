@@ -13,13 +13,27 @@ namespace SP2P
 {
     public partial class IPShowForm : Form
     {
-        IPAddress[] ips;
-        public bool Accepted = true;
+        private IPAddress[] ips;
 
         public IPShowForm(IPAddress[] in_ips)
         {
             InitializeComponent();
             ips = in_ips;
+        }
+
+        private void IPShowForm_Load(object sender, EventArgs e)
+        {
+            label1.Text = "\n" + label1.Text;
+        }
+
+        private void Yes_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Yes;
+        }
+
+        private void No_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.No;
         }
     }
 }

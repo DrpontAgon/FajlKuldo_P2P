@@ -181,17 +181,17 @@ namespace SP2P
                                 RuntimeLogger.WriteLine($"Connection Accepted: {connection_accepted}.");
 
 
-                                //IPAddress[] ips = new IPAddress[n / 4];
-                                //for (int i = 0; i < ips.Length; i++)
-                                //{
-                                //    ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
-                                //    ips[i] = new IPAddress(ip_bytes);
-                                //}
-                                //using (IPShowForm f = new IPShowForm(ips))
-                                //{
-                                //    f.ShowDialog();
-                                //    connection_accepted = f.Accepted;
-                                //}
+                                IPAddress[] ips = new IPAddress[n / 4];
+                                for (int i = 0; i < ips.Length; i++)
+                                {
+                                    ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
+                                    ips[i] = new IPAddress(ip_bytes);
+                                }
+                                using (IPShowForm f = new IPShowForm(ips))
+                                {
+                                    f.ShowDialog();
+                                    connection_accepted = f.DialogResult == DialogResult.Yes;
+                                }
 
                                 RuntimeLogger.WriteLine($"Sending the answer back...");
                                 if (connection_accepted)
