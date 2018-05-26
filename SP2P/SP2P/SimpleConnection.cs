@@ -17,6 +17,16 @@ namespace SP2P
         ANSWER_NO = 22
     };
 
+    [Flags]
+    enum State : byte
+    {
+        Valid_Response = 1,
+        Client_Connected = 2,
+        Other_Connected = 4,
+        Disconnect_Request = 8,
+        Active_Connection = 16
+    }
+
     static class SimpleConnection
     {
         #region variables
@@ -41,6 +51,7 @@ namespace SP2P
         #region basic
         public static async Task<bool> Accept(int port = 55585, int timeout_ms = 1000)
         {
+            RuntimeLogger.WriteLine("Attempting connection...");
             try
             {
                 if (!IsClosed)
@@ -57,6 +68,7 @@ namespace SP2P
                 IsClosed = false;
                 if (IsConnected)
                 {
+                    RuntimeLogger.WriteLine("Connection success.");
                     if (!IsSilent)
                     {
                         MessageBox.Show("Sikeres fogadás.");
@@ -64,6 +76,7 @@ namespace SP2P
                 }
                 else
                 {
+                    RuntimeLogger.WriteLine("Connection faliure.");
                     if (!IsSilent)
                     {
                         MessageBox.Show("Sikertelen fogadás.");
@@ -74,6 +87,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
@@ -84,6 +98,7 @@ namespace SP2P
         }
         public static async Task<bool> Connect(IPAddress ip, int port = 55585, int timeout_ms = 1000)
         {
+            RuntimeLogger.WriteLine("Attempting connection...");
             try
             {
                 if (!IsClosed)
@@ -97,6 +112,7 @@ namespace SP2P
                 IsClosed = false;
                 if (IsConnected)
                 {
+                    RuntimeLogger.WriteLine("Connection success.");
                     if (!IsSilent)
                     {
                         MessageBox.Show("Sikeres csatlakozás.");
@@ -104,6 +120,7 @@ namespace SP2P
                 }
                 else
                 {
+                    RuntimeLogger.WriteLine("Connection faliure.");
                     if (!IsSilent)
                     {
                         MessageBox.Show("Sikertelen csatlakozás.");
@@ -114,6 +131,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
@@ -124,13 +142,16 @@ namespace SP2P
         }
         public static async Task<int> SendBytes(byte[] bytes)
         {
+            RuntimeLogger.WriteLine("Attempting sending byte(s)...");
             try
             {
                 if (!IsConnected)
                 {
+                    RuntimeLogger.WriteLine("No connection.");
                     return -60;
                 }
                 int ret = await ClientSocket.SendAsyncTAP(bytes);
+                RuntimeLogger.WriteLine($"Successfully sent {ret} byte(s).");
                 if (!IsSilent)
                 {
                     MessageBox.Show("Sikeres adatküldés.");
@@ -139,6 +160,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
@@ -149,13 +171,16 @@ namespace SP2P
         }
         public static async Task<int> ReceiveBytes(byte[] bytes)
         {
+            RuntimeLogger.WriteLine("Attempting receiving byte(s)...");
             try
             {
                 if (!IsConnected)
                 {
+                    RuntimeLogger.WriteLine("No connection.");
                     return -60;
                 }
                 int ret = await ClientSocket.ReceiveAsyncTAP(bytes);
+                RuntimeLogger.WriteLine($"Successfully received {ret} byte(s).");
                 if (!IsSilent)
                 {
                     MessageBox.Show("Sikeres adatfogadás.");
@@ -164,6 +189,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
@@ -174,9 +200,11 @@ namespace SP2P
         }
         public static async Task<bool> SendFile(string path)
         {
+            RuntimeLogger.WriteLine("Attempting sending file...");
             try
             {
                 await ClientSocket.SendFileAsyncTAP(path);
+                RuntimeLogger.WriteLine($"Successfully sent {path}.");
                 if (!IsSilent)
                 {
                     MessageBox.Show("Sikeres fájlküldés.");
@@ -185,6 +213,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");
@@ -195,6 +224,7 @@ namespace SP2P
         }
         public static void Close()
         {
+            RuntimeLogger.WriteLine("Attempting closing connection...");
             try
             {
                 if (ClientSocket != null)
@@ -208,6 +238,7 @@ namespace SP2P
                 }
                 IsServer = false;
                 IsClosed = true;
+                RuntimeLogger.WriteLine("Closing success...");
                 if (!IsSilent)
                 {
                     MessageBox.Show("Sikeres szétkapcsolás.");
@@ -215,6 +246,7 @@ namespace SP2P
             }
             catch (SocketException e)
             {
+                RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
                     MessageBox.Show($"{e.ErrorCode}: {e.Message}");

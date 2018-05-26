@@ -135,6 +135,24 @@ namespace SP2P
         }
     }
 
+    static class StateExtensions
+    {
+        public static bool Contains(this State state, State other)
+        {
+            return other == 0 ? state == 0 : (state & other) == other;
+        }
+
+        public static bool NotContains(this State state, State other)
+        {
+            bool l = false;
+            for (int sv = (int)(state & other); !l && sv > 0; sv = sv >> 1)
+            {
+                l |= (sv & 1) == 1;
+            }
+            return l;
+        }
+    }
+
     static class SocketExtensions
     {
         public static IAsyncResult BeginSend(this Socket socket, byte[] buffer, AsyncCallback callback, object state)
