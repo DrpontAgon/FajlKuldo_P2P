@@ -191,7 +191,7 @@ namespace SP2P
                                 }
                                 using (IPShowForm f = new IPShowForm(ips))
                                 {
-                                    f.ShowDialog();
+                                    f.ShowDialog(this);
                                     connection_accepted = f.DialogResult == DialogResult.Yes;
                                 }
 
