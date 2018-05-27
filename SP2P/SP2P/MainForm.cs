@@ -101,14 +101,6 @@ namespace SP2P
 
         private async void bt_listen_Click(object sender, EventArgs e)
         {
-            IPAddress[] ipaddresses = {new IPAddress(0x2414188f), new IPAddress(0x2414188f) , new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f)};
-            bool caccept = false;
-            using (IPShowForm f = new IPShowForm(ipaddresses))
-            {
-                f.ShowDialog();
-                caccept = f.DialogResult == DialogResult.Yes;
-            }
-            return;
             if (listening)
             {
                 RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
