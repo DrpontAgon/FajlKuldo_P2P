@@ -71,7 +71,7 @@ namespace SP2P
                     RuntimeLogger.WriteLine("Connection success.");
                     if (!IsSilent)
                     {
-                        MessageBox.Show("Sikeres fogadás.");
+                        MessageBox.Show(@"Sikeres fogadás.");
                     }
                 }
                 else
@@ -79,7 +79,7 @@ namespace SP2P
                     RuntimeLogger.WriteLine("Connection faliure.");
                     if (!IsSilent)
                     {
-                        MessageBox.Show("Sikertelen fogadás.");
+                        MessageBox.Show(@"Sikertelen fogadás.");
                     }
                     Close();
                 }
@@ -90,7 +90,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
                 return false;
             }
@@ -115,7 +115,7 @@ namespace SP2P
                     RuntimeLogger.WriteLine("Connection success.");
                     if (!IsSilent)
                     {
-                        MessageBox.Show("Sikeres csatlakozás.");
+                        MessageBox.Show(@"Sikeres csatlakozás.");
                     }
                 }
                 else
@@ -123,7 +123,7 @@ namespace SP2P
                     RuntimeLogger.WriteLine("Connection faliure.");
                     if (!IsSilent)
                     {
-                        MessageBox.Show("Sikertelen csatlakozás.");
+                        MessageBox.Show(@"Sikertelen csatlakozás.");
                     }
                     Close();
                 }
@@ -134,7 +134,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
                 return false;
             }
@@ -154,7 +154,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Successfully sent {ret} byte(s).");
                 if (!IsSilent)
                 {
-                    MessageBox.Show("Sikeres adatküldés.");
+                    MessageBox.Show(@"Sikeres adatküldés.");
                 }
                 return ret;
             }
@@ -163,7 +163,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
                 return -1 * e.ErrorCode;
             }
@@ -183,7 +183,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Successfully received {ret} byte(s).");
                 if (!IsSilent)
                 {
-                    MessageBox.Show("Sikeres adatfogadás.");
+                    MessageBox.Show(@"Sikeres adatfogadás.");
                 }
                 return ret;
             }
@@ -192,7 +192,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
                 return -1 * e.ErrorCode;
             }
@@ -207,7 +207,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Successfully sent {path}.");
                 if (!IsSilent)
                 {
-                    MessageBox.Show("Sikeres fájlküldés.");
+                    MessageBox.Show(@"Sikeres fájlküldés.");
                 }
                 return true;
             }
@@ -216,7 +216,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
                 return false;
             }
@@ -241,7 +241,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine("Closing success...");
                 if (!IsSilent)
                 {
-                    MessageBox.Show("Sikeres szétkapcsolás.");
+                    MessageBox.Show(@"Sikeres szétkapcsolás.");
                 }
             }
             catch (SocketException e)
@@ -249,7 +249,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine($"Silent Socket Exception: {e.ErrorCode}");
                 if (!IsSilent)
                 {
-                    MessageBox.Show($"{e.ErrorCode}: {e.Message}");
+                    MessageBox.Show($@"{e.ErrorCode}: {e.Message}");
                 }
             }
             catch (ObjectDisposedException) { /*nothing*/ }

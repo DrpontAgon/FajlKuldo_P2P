@@ -23,17 +23,10 @@ namespace SP2P
 
         private void IPShowForm_Load(object sender, EventArgs e)
         {
-            label1.Text = "\n" + label1.Text;
-        }
-
-        private void Yes_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Yes;
-        }
-
-        private void No_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.No;
+            foreach (var item in ips)
+            {
+                IPAddressBox.Items.Add(item.ToString());
+            }
         }
     }
 }

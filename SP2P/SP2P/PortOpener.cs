@@ -120,7 +120,7 @@ namespace SP2P
                     {
                         if (!silent)
                         {
-                            MessageBox.Show($"Meg van nyitva ez a port: {port}!");
+                            MessageBox.Show($@"Meg van nyitva ez a port: {port}!");
                         }
                         return true;
                     }

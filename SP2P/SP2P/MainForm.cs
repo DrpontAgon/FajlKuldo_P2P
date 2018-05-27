@@ -36,7 +36,7 @@ namespace SP2P
                 RuntimeLogger.WriteLine("Successfully found NAT device.");
                 if (!await PortOpener.CloseAllPortsExcept(Settings.Port))
                 {
-                    MessageBox.Show("Nem sikerült minden, nem alapértelmezett portot bezárni!");
+                    MessageBox.Show(@"Nem sikerült minden, nem alapértelmezett portot bezárni!");
                 }
                 port_open = await PortOpener.IsPortOpen();
                 RuntimeLogger.WriteLine($"{Settings.Port} is open: {port_open}");
@@ -46,7 +46,7 @@ namespace SP2P
             else
             {
                 RuntimeLogger.WriteLine("NAT device not found.");
-                MessageBox.Show("Port műveletek nem lehetségesek a programon belül!");
+                MessageBox.Show(@"Port műveletek nem lehetségesek a programon belül!");
             }
         }
 
@@ -58,41 +58,41 @@ namespace SP2P
             lb_lan.Text = IPChangeChecker.PrivateIP.ToString();
             IPChangeChecker.PublicIP.CheckAndStoreIP();
             //IPChangeChecker.PrivateIP.CheckAndStoreIP();
-            RuntimeLogger.WriteLine($"IP changed.");
+            RuntimeLogger.WriteLine("IP changed.");
         }
 
         private async void bt_port_openclose_Click(object sender, EventArgs e)
         {
-            bt_port_openclose.Text = "folyamatban...";
+            bt_port_openclose.Text = @"folyamatban...";
             bt_port_openclose.Enabled = false;
             if (port_open)
             {
-                RuntimeLogger.WriteLine($"Closing port...");
+                RuntimeLogger.WriteLine("Closing port...");
                 if (await PortOpener.ClosePort())
                 {
-                    RuntimeLogger.WriteLine($"Port successfully closed.");
-                    bt_port_openclose.Text = "Port nyitása";
+                    RuntimeLogger.WriteLine("Port successfully closed.");
+                    bt_port_openclose.Text = @"Port nyitása";
                     port_open = false;
                 }
                 else
                 {
-                    RuntimeLogger.WriteLine($"Port could not be closed.");
-                    bt_port_openclose.Text = "Port zárása";
+                    RuntimeLogger.WriteLine("Port could not be closed.");
+                    bt_port_openclose.Text = @"Port zárása";
                 }
                 bt_port_openclose.Enabled = true;
             }
             else
             {
-                RuntimeLogger.WriteLine($"Opening port...");
+                RuntimeLogger.WriteLine("Opening port...");
                 if (await PortOpener.OpenPort())
                 {
-                    RuntimeLogger.WriteLine($"Port successfully opened.");
+                    RuntimeLogger.WriteLine("Port successfully opened.");
                     bt_port_openclose.Text = "Port zárása";
                     port_open = true;
                 }
                 else
                 {
-                    RuntimeLogger.WriteLine($"Port successfully opened.");
+                    RuntimeLogger.WriteLine("Port successfully opened.");
                     bt_port_openclose.Text = "Port nyitása";
                 }
                 bt_port_openclose.Enabled = true;
@@ -101,6 +101,14 @@ namespace SP2P
 
         private async void bt_listen_Click(object sender, EventArgs e)
         {
+            IPAddress[] ipaddresses = {new IPAddress(0x2414188f), new IPAddress(0x2414188f) , new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f), new IPAddress(0x2414188f)};
+            bool caccept = false;
+            using (IPShowForm f = new IPShowForm(ipaddresses))
+            {
+                f.ShowDialog();
+                caccept = f.DialogResult == DialogResult.Yes;
+            }
+            return;
             if (listening)
             {
                 RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
@@ -109,19 +117,19 @@ namespace SP2P
                 {
                     if (!valid_response)
                     {
-                        MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                        MessageBox.Show(@"Hiba történt a lecsatlakozáskor!");
                     }
                 }
-                bt_listen.Text = "Kapcsolatra várás";
+                bt_listen.Text = @"Kapcsolatra várás";
                 bt_connect.Enabled = true;
                 panel.Enabled = false;
                 listening = false;
                 SimpleConnection.Close();
-                RuntimeLogger.WriteLine($"Stopped waiting for connection.");
+                RuntimeLogger.WriteLine("Stopped waiting for connection.");
             }
             else
             {
-                RuntimeLogger.WriteLine($"Started waiting for connection...");
+                RuntimeLogger.WriteLine("Started waiting for connection...");
                 bt_listen.Text = "Várás befejezése";
                 bt_connect.Enabled = false;
                 listening = true;
@@ -131,14 +139,13 @@ namespace SP2P
                     if (connection_accepted)
                     {
                         await SimpleConnection.Accept();
-                        RuntimeLogger.WriteLine($"Connection started.");
+                        RuntimeLogger.WriteLine("Connection started.");
                         byte[] receive_bytes = new byte[1024];
                         byte[] send_bytes = new byte[1];
                         int received = 0;
-                        bool valid_response;
 
                         RuntimeLogger.WriteLine("Waiting for Connection request...");
-                        valid_response = await SimpleConnection.MessageCommunication(Message.OK, Message.CONNECT_REQUEST, false);
+                        var valid_response = await SimpleConnection.MessageCommunication(Message.OK, Message.CONNECT_REQUEST, false);
                         RuntimeLogger.WriteLine(SimpleConnection.FormatCommunication(valid_response, Message.OK, Message.CONNECT_REQUEST, false));
 
                         int n = 0;
@@ -187,7 +194,7 @@ namespace SP2P
                                 IPAddress[] ips = new IPAddress[n / 4];
                                 for (int i = 0; i < ips.Length; i++)
                                 {
-                                    ip_bytes = new byte[] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
+                                    ip_bytes = new [] { receive_bytes[i * 4 + 0], receive_bytes[i * 4 + 1], receive_bytes[i * 4 + 2], receive_bytes[i * 4 + 3] };
                                     ips[i] = new IPAddress(ip_bytes);
                                 }
                                 using (IPShowForm f = new IPShowForm(ips))
@@ -196,7 +203,7 @@ namespace SP2P
                                     connection_accepted = f.DialogResult == DialogResult.Yes;
                                 }
 
-                                RuntimeLogger.WriteLine($"Sending the answer back...");
+                                RuntimeLogger.WriteLine("Sending the answer back...");
                                 if (connection_accepted)
                                 {
                                     valid_response = await SimpleConnection.MessageCommunication(Message.ANSWER_YES, Message.OK, true);
@@ -246,13 +253,13 @@ namespace SP2P
                                         }
                                         break;
                                     case (byte)Message.DISCONNECT_REQUEST:
-                                        RuntimeLogger.WriteLine($"Other Client requested to disconnect.");
-                                        MessageBox.Show("A másik fél lecsatlakozott!");
+                                        RuntimeLogger.WriteLine("Other Client requested to disconnect.");
+                                        MessageBox.Show(@"A másik fél lecsatlakozott!");
                                         connection_accepted = false;
                                         valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
                                         break;
                                     default:
-                                        RuntimeLogger.WriteLine($"Invalid answer.");
+                                        RuntimeLogger.WriteLine("Invalid answer.");
                                         valid_response = false;
                                         break;
                                 }
@@ -265,7 +272,7 @@ namespace SP2P
 
                         if (!valid_response)
                         {
-                            RuntimeLogger.WriteLine($"Attempting to send back INVALID.");
+                            RuntimeLogger.WriteLine("Attempting to send back INVALID.");
                             while (await SimpleConnection.MessageCommunication(Message.INVALID, Message.OK, true)) { /*nothing*/ }
                         }
 
@@ -274,7 +281,7 @@ namespace SP2P
                     } // await sc.AcceptAsync()
                     else
                     {
-                        RuntimeLogger.WriteLine($"Connection closed.");
+                        RuntimeLogger.WriteLine("Connection closed.");
                         bt_listen.Text = "Kapcsolatra várás";
                         bt_connect.Enabled = true;
                         listening = false;
@@ -292,14 +299,14 @@ namespace SP2P
                 bool valid_response = await SimpleConnection.MessageCommunication(Message.DISCONNECT_REQUEST, Message.OK, true);
                 if (!valid_response)
                 {
-                    MessageBox.Show("Hiba történt a lecsatlakozáskor!");
+                    MessageBox.Show(@"Hiba történt a lecsatlakozáskor!");
                 }
                 bt_connect.Text = "Csatlakozás";
                 bt_listen.Enabled = true;
                 panel.Enabled = false;
                 connected = false;
                 SimpleConnection.Close();
-                RuntimeLogger.WriteLine($"Stopped accepting the connection.");
+                RuntimeLogger.WriteLine("Stopped accepting the connection.");
             }
             else
             {
@@ -308,7 +315,7 @@ namespace SP2P
                 {
                     if (port.PortInLimits(50000, 65535))
                     {
-                        RuntimeLogger.WriteLine($"Started accepting the connection...");
+                        RuntimeLogger.WriteLine("Started accepting the connection...");
                         bt_connect.Text = "Lecsatlakozás";
                         bt_listen.Enabled = false;
                         connected = true;
@@ -318,7 +325,7 @@ namespace SP2P
                             if (connection_accepted)
                             {
                                 await SimpleConnection.Connect(ip, port);
-                                RuntimeLogger.WriteLine($"Connection started.");
+                                RuntimeLogger.WriteLine("Connection started.");
                                 byte[] receive_bytes = new byte[1024];
                                 byte[] send_bytes = new byte[1];
                                 int sent = 0;
@@ -397,13 +404,13 @@ namespace SP2P
                                                 }
                                                 break;
                                             case (byte)Message.DISCONNECT_REQUEST:
-                                                RuntimeLogger.WriteLine($"Other Client requested to disconnect.");
-                                                MessageBox.Show("A másik fél lecsatlakozott!");
+                                                RuntimeLogger.WriteLine("Other Client requested to disconnect.");
+                                                MessageBox.Show(@"A másik fél lecsatlakozott!");
                                                 connection_accepted = false;
                                                 valid_response = await SimpleConnection.MessageCommunication(Message.OK, true);
                                                 break;
                                             default:
-                                                RuntimeLogger.WriteLine($"Invalid answer.");
+                                                RuntimeLogger.WriteLine("Invalid answer.");
                                                 valid_response = false;
                                                 break;
                                         }
@@ -433,12 +440,12 @@ namespace SP2P
                     }
                     else
                     {
-                        MessageBox.Show("Portszám csak 50000 és 65535 között lehet!");
+                        MessageBox.Show(@"Portszám csak 50000 és 65535 között lehet!");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Hibás IP cím vagy portszám!");
+                    MessageBox.Show(@"Hibás IP cím vagy portszám!");
                 }
             }
         }
@@ -468,13 +475,13 @@ namespace SP2P
 
                 if (!valid_response)
                 {
-                    MessageBox.Show("Hiba történt a fájlküldés folyamán!");
+                    MessageBox.Show(@"Hiba történt a fájlküldés folyamán!");
                 }
 
             }
             else
             {
-                MessageBox.Show("Sikertelen fájlküldési kezdeményezés!");
+                MessageBox.Show(@"Sikertelen fájlküldési kezdeményezés!");
             }
         }
 

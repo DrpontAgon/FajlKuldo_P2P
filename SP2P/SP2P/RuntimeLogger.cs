@@ -14,7 +14,7 @@ namespace SP2P
         }
         public static void Close()
         {
-            if (f != null) f.Close();
+            f?.Close();
         }
 #pragma warning disable 0649  
         static StreamWriter f;
@@ -32,7 +32,7 @@ namespace SP2P
                 f.WriteLine();
             }
 #else
-            Console.Write($"{dt} | ");
+            Console.Write($@"{dt} | ");
             Console.WriteLine();
 #endif
         }
@@ -46,7 +46,7 @@ namespace SP2P
                 f.WriteLine(value);
             }
 #else
-            Console.Write($"{dt} | ");
+            Console.Write($@"{dt} | ");
             Console.WriteLine(value);
 #endif
         }
@@ -60,7 +60,7 @@ namespace SP2P
                 f.WriteLine(buffer);
             }
 #else
-            Console.Write($"{dt} | ");
+            Console.Write($@"{dt} | ");
             Console.WriteLine(buffer);
 #endif
         }
@@ -74,7 +74,7 @@ namespace SP2P
                 f.WriteLine(buffer, index, count);
             }
 #else
-            Console.Write($"{dt} | ");
+            Console.Write($@"{dt} | ");
             Console.WriteLine(buffer, index, count);
 #endif
         }
@@ -88,7 +88,7 @@ namespace SP2P
                 f.WriteLine(format, arg);
             }
 #else
-            Console.Write($"{dt} | ");
+            Console.Write($@"{dt} | ");
             Console.WriteLine(format, arg);
 #endif
         }
