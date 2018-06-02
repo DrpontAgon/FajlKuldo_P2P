@@ -101,19 +101,6 @@ namespace SP2P
 
         private async void bt_listen_Click(object sender, EventArgs e)
         {
-            using (FileReceiverForm form = new FileReceiverForm(new (string, ulong)[] {("A", 19), ("B", 30)}))
-            {
-                form.ShowDialog();
-                if (form.ReceiveFiles != null)
-                {
-                    foreach (var file in form.ReceiveFiles)
-                    {
-                        MessageBox.Show(file.FileName);
-                    }
-                }
-            }
-
-            return;
             if (listening)
             {
                 RuntimeLogger.WriteLine("Sending DISCONNECT_REQUEST...");
