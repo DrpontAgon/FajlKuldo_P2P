@@ -12,20 +12,35 @@ namespace SP2P
 {
     public partial class FileReceiverForm : Form
     {
-        public (string FileName, ulong Size)[] ReceiveFiles { get; private set; }
+        enum FileSizeUnit
+        {
+            B, KB, MB, GB, TB, PB, EB, ZB, YB
+        }
+        public (string FileName, ulong Size)[] FilesToSave { get; private set; }
+        public bool[] ReceiveFiles { get; }
+
         public FileReceiverForm((string,ulong)[] files)
         {
             InitializeComponent();
-            ReceiveFiles = files;
+            FilesToSave = files;
+            ReceiveFiles = new bool[files.Length];
             for (int i = 0; i < files.Length; i++)
             {
-                listView1.Items.Add(files[i].Item1).SubItems.Add(files[i].Item2+ " MB");
+                (double size, FileSizeUnit fsu) = (Convert.ToDouble(files[i].Item2), FileSizeUnit.B);
+                while (size >= 1024.0 && fsu < FileSizeUnit.YB)
+                {
+                    size /= 1024.0;
+                    fsu++;
+                }
+                ReceiveFiles[i] = true;
+                listView1.Items.Add(files[i].Item1).SubItems.Add($"{size:F2} {fsu}");
+                listView1.Items[i].Checked = true;
             }
         }
 
         private void listView1_LabelEdited(object sender, LabelEditEventArgs e)
         {
-            ReceiveFiles[e.Item].FileName = e.Label;
+            FilesToSave[e.Item].FileName = e.Label;
         }
 
         private void AcceptButton_Click(object sender, EventArgs e)
@@ -33,13 +48,14 @@ namespace SP2P
             List<(string,ulong)> files = new List<(string, ulong)>();
             for (int i = 0; i < listView1.Items.Count; i++)
             {
+                ReceiveFiles[i] = listView1.Items[i].Checked;
                 if (listView1.Items[i].Checked)
                 {
-                    files.Add((listView1.Items[i].Text, ReceiveFiles[i].Size));
+                    files.Add((listView1.Items[i].Text, FilesToSave[i].Size));
                 }
             }
 
-            ReceiveFiles = files.ToArray();
+            FilesToSave = files.ToArray();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -49,7 +65,12 @@ namespace SP2P
                 item.Checked = false;
             }
 
-            ReceiveFiles = null;
+            for (int i = 0; i < ReceiveFiles.Length; i++)
+            {
+                ReceiveFiles[i] = false;
+            }
+
+            FilesToSave = null;
         }
 
         private void CheckAll_Click(object sender, EventArgs e)

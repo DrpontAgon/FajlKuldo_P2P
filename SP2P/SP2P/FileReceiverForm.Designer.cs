@@ -91,13 +91,13 @@
             // FileName
             // 
             this.FileName.Text = "Fájlnév";
-            this.FileName.Width = 165;
+            this.FileName.Width = 180;
             // 
             // FileSize
             // 
             this.FileSize.Text = "Fájlméret";
             this.FileSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.FileSize.Width = 61;
+            this.FileSize.Width = 72;
             // 
             // CheckAll
             // 
